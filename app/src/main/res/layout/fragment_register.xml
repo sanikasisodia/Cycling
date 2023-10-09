@@ -37,12 +37,11 @@
         android:hint="Password"
         android:inputType="textPassword" />
 
-    <Button
-        android:id="@+id/clubRegister"
-        android:layout_width="380dp"
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Register as club " />
+        android:drawSelectorOnTop = "true" />
 
     <Button
         android:id="@+id/participantRegister"
