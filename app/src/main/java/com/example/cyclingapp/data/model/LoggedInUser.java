@@ -16,6 +16,13 @@ public class LoggedInUser {
         AppDatabase db = Room.databaseBuilder(App.getAppContext(), AppDatabase.class, "database-name").allowMainThreadQueries().build();
         UserDao userDao = db.userDao();
 
+        User test = new User();
+        test.email = "test@gmail.com";
+        test.firstName = "Admin";
+        test.lastName = "User";
+        test.role = Role.ADMIN;
+        userDao.insertAll(test);
+
         List<User> users = userDao.getAll().blockingGet();
         for (User user : users) {
             if (user.email.equals(email) && /* check password */ true) {
