@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:context=".ui.register.RegisterFragment">
 
     <EditText
-        android:id="@+id/nameRegisterEditText"
+        android:id="@+id/firstName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -15,7 +17,7 @@
         android:inputType="text" />
 
     <EditText
-        android:id="@+id/surnameRegisterEditText"
+        android:id="@+id/lastName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -23,7 +25,7 @@
         android:inputType="text" />
 
     <EditText
-        android:id="@+id/emailRegisterEditText"
+        android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -31,23 +33,34 @@
         android:inputType="textEmailAddress" />
 
     <EditText
-        android:id="@+id/passwordRegisterEditText"
+        android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
         android:inputType="textPassword" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/role"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawSelectorOnTop = "true" />
 
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="64dp"
+        android:visibility="gone" />
+
     <Button
-        android:id="@+id/participantRegister"
+        android:id="@+id/register"
         android:layout_width="371dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Register as participant" />
+        android:text="Register" />
 
 </LinearLayout>
