@@ -25,7 +25,7 @@ class LoginFormState {
     }
 
     @Nullable
-    Integer getUsernameError() {
+    Integer getEmailError() {
         return usernameError;
     }
 

@@ -12,20 +12,17 @@ public class LoggedInUser {
     private Integer userId;
     private String displayName;
 
-    public LoggedInUser(Role role, String email, String firstName, String lastName) {
+    public LoggedInUser(String email, String password) {
         AppDatabase db = Room.databaseBuilder(App.getAppContext(), AppDatabase.class, "database-name").allowMainThreadQueries().build();
         UserDao userDao = db.userDao();
 
-        User user = new User();
-        user.id = userDao.getAll().blockingGet().size() + 1;
-        user.role = role;
-        user.email = email;
-        user.firstName = firstName;
-        user.lastName = lastName;
-        userDao.insertAll(user);
-
-        this.userId = user.id;
-        this.displayName = user.firstName + " " + user.lastName;
+        List<User> users = userDao.getAll().blockingGet();
+        for (User user : users) {
+            if (user.email.equals(email) && /* check password */ true) {
+                userId = user.id;
+                displayName = user.firstName + " " + user.lastName;
+            }
+        }
 
         db.close();
     }

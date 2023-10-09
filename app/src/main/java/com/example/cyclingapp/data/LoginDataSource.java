@@ -16,14 +16,12 @@ import java.util.List;
  */
 public class LoginDataSource {
 
-    public Result<LoggedInUser> login(String username, String password) {
+    public Result<LoggedInUser> login(String email, String password) {
         try {
             LoggedInUser user =
                     new LoggedInUser(
-                            Role.PARTICIPANT,
-                            "email",
-                            "firstName",
-                            "lastName");
+                            email,
+                            password);
             return new Result.Success<>(user);
         } catch (Exception e) {
             return new Result.Error(new IOException("Error logging in", e));
