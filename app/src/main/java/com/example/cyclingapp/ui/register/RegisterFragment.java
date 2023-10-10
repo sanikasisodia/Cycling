@@ -25,6 +25,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.cyclingapp.R;
 import com.example.cyclingapp.data.model.Role;
 import com.example.cyclingapp.databinding.FragmentRegisterBinding;
+import com.example.cyclingapp.ui.login.LoginFragment;
+import com.example.cyclingapp.ui.welcome.WelcomeFragment;
 
 public class RegisterFragment extends Fragment {
 
@@ -138,11 +140,17 @@ public class RegisterFragment extends Fragment {
     }
 
     private void updateUiWithUser(RegisteredUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
+        String welcome = getString(R.string.welcome) + " " + model.getDisplayName();
 
-        // TODO : initiate successful logged in experience
         if (getContext() != null && getContext().getApplicationContext() != null) {
             Toast.makeText(getContext().getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
+
+            ViewGroup fragmentContainerView = getActivity().findViewById(R.id.fragment_container_view);
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(fragmentContainerView.getId(), LoginFragment.class, null)
+                    .setReorderingAllowed(true)
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 

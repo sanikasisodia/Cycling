@@ -1,7 +1,5 @@
 package com.example.cyclingapp.ui.register;
 
-import android.util.Patterns;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -9,8 +7,8 @@ import androidx.lifecycle.ViewModel;
 import com.example.cyclingapp.R;
 import com.example.cyclingapp.data.Register;
 import com.example.cyclingapp.data.Result;
-import com.example.cyclingapp.data.model.LoggedInUser;
 import com.example.cyclingapp.data.model.Role;
+import com.example.cyclingapp.data.Validation;
 
 public class RegisterViewModel extends ViewModel {
 
@@ -37,29 +35,12 @@ public class RegisterViewModel extends ViewModel {
     }
 
     public void registerDataChanged(Role role, String email, String firstName, String lastName, String password) {
-        if (!isEmailValid(email)) {
+        if (!Validation.isEmailValid(email)) {
             registerFormState.setValue(new RegisterFormState(R.string.invalid_email, null));
-        } else if (!isPasswordValid(password)) {
+        } else if (!Validation.isPasswordValid(password)) {
             registerFormState.setValue(new RegisterFormState(null, R.string.invalid_password));
         } else {
             registerFormState.setValue(new RegisterFormState(true));
         }
-    }
-
-    // A placeholder username validation check
-    private boolean isEmailValid(String email) {
-        if (email == null) {
-            return false;
-        }
-        if (email.contains("@")) {
-            return Patterns.EMAIL_ADDRESS.matcher(email).matches();
-        } else {
-            return !email.trim().isEmpty();
-        }
-    }
-
-    // A placeholder password validation check
-    private boolean isPasswordValid(String password) {
-        return password != null && password.trim().length() > 5;
     }
 }
