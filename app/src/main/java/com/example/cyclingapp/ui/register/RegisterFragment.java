@@ -100,7 +100,7 @@ public class RegisterFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                registerViewModel.registerDataChanged(Role.valueOf(roleSelector.getSelectedItem().toString()),
+                registerViewModel.registerDataChanged(Role.valueOf(roleSelector.getSelectedItem().toString().toUpperCase()),
                         emailEditText.getText().toString(),
                         firstNameEditText.getText().toString(),
                         lastNameEditText.getText().toString(),
@@ -114,7 +114,7 @@ public class RegisterFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    registerViewModel.register(Role.valueOf(roleSelector.getSelectedItem().toString()),
+                    registerViewModel.register(Role.valueOf(roleSelector.getSelectedItem().toString().toUpperCase()),
                             emailEditText.getText().toString(),
                             firstNameEditText.getText().toString(),
                             lastNameEditText.getText().toString(),
@@ -128,7 +128,7 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                registerViewModel.register(Role.valueOf(roleSelector.getSelectedItem().toString()),
+                registerViewModel.register(Role.valueOf(roleSelector.getSelectedItem().toString().toUpperCase()),
                         emailEditText.getText().toString(),
                         firstNameEditText.getText().toString(),
                         lastNameEditText.getText().toString(),

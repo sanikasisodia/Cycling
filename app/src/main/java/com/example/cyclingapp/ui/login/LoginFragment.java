@@ -21,9 +21,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.cyclingapp.MainActivity;
 import com.example.cyclingapp.databinding.FragmentLoginBinding;
 
 import com.example.cyclingapp.R;
+import com.example.cyclingapp.ui.register.RegisterFragment;
+import com.example.cyclingapp.ui.welcome.WelcomeFragment;
 
 public class LoginFragment extends Fragment {
 
@@ -50,6 +53,7 @@ public class LoginFragment extends Fragment {
         final EditText emailEditText = binding.email;
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
+        final Button registerButton = binding.register;
         final ProgressBar loadingProgressBar = binding.loading;
 
         loginViewModel.getLoginFormState().observe(getViewLifecycleOwner(), new Observer<LoginFormState>() {
@@ -123,14 +127,35 @@ public class LoginFragment extends Fragment {
                         passwordEditText.getText().toString());
             }
         });
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadingProgressBar.setVisibility(View.VISIBLE);
+                ViewGroup fragmentContainerView = getActivity().findViewById(R.id.fragment_container_view);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(fragmentContainerView.getId(), RegisterFragment.class, null)
+                        .setReorderingAllowed(true)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
-
-        // TODO : initiate successful logged in experience
         if (getContext() != null && getContext().getApplicationContext() != null) {
-            Toast.makeText(getContext().getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
+            Bundle args = new Bundle();
+            args.putString("displayName", model.getDisplayName());
+            args.putString("role", model.getRole());
+            WelcomeFragment welcomeFragment = new WelcomeFragment();
+            welcomeFragment.setArguments(args);
+
+            ViewGroup fragmentContainerView = getActivity().findViewById(R.id.fragment_container_view);
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(fragmentContainerView.getId(), welcomeFragment, null)
+                    .setReorderingAllowed(true)
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 

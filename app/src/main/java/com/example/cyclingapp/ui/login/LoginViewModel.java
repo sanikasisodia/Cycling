@@ -35,7 +35,7 @@ public class LoginViewModel extends ViewModel {
 
         if (result instanceof Result.Success) {
             LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName(), data.getRole())));
         } else {
             loginResult.setValue(new LoginResult(R.string.login_failed));
         }
@@ -56,15 +56,20 @@ public class LoginViewModel extends ViewModel {
         if (email == null) {
             return false;
         }
-        if (email.contains("@")) {
-            return Patterns.EMAIL_ADDRESS.matcher(email).matches();
-        } else {
-            return !email.trim().isEmpty();
+        if (email.equals("admin")) {
+            return true;
         }
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     // A placeholder password validation check
     private boolean isPasswordValid(String password) {
-        return password != null && password.trim().length() > 5;
+        if (password == null) {
+            return false;
+        }
+        if (password.equals("admin")) {
+            return true;
+        }
+        return password.trim().length() > 5;
     }
 }

@@ -27,11 +27,10 @@ public class RegisterViewModel extends ViewModel {
 
     public void register(Role role, String email, String firstName, String lastName, String password) {
         // can be launched in a separate asynchronous job
-        Result<Register> result = Register.register(role, email, firstName, lastName, password);
+        Result<Register> result = new Register().register(role, email, firstName, lastName, password);
 
         if (result instanceof Result.Success) {
-            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-            registerResult.setValue(new RegisterResult(new RegisteredUserView(data.getDisplayName())));
+            registerResult.setValue(new RegisterResult(new RegisteredUserView(((Result.Success<Register>) result).getData().getDisplayName())));
         } else {
             registerResult.setValue(new RegisterResult(R.string.register_failed));
         }

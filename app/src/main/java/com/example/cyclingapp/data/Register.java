@@ -7,22 +7,33 @@ import com.example.cyclingapp.data.model.AppDatabase;
 import com.example.cyclingapp.data.model.Role;
 import com.example.cyclingapp.data.model.User;
 import com.example.cyclingapp.data.model.UserDao;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class Register {
-    public static Result<Register> register(Role role, String email, String firstName, String lastName, String password) {
+
+    User user = new User();
+
+    public Result<Register> register(Role role, String email, String firstName, String lastName, String password) {
         AppDatabase db = Room.databaseBuilder(App.getAppContext(), AppDatabase.class, "database-name").allowMainThreadQueries().build();
         UserDao userDao = db.userDao();
 
-        User newUser = new User();
-        newUser.role = role;
-        newUser.email = email;
-        newUser.firstName = firstName;
-        newUser.lastName = lastName;
-        // newUser.password = password;
-        userDao.insertAll(newUser);
+        user.id = java.util.UUID.randomUUID().toString();
+        user.role = role;
+        user.email = email;
+        user.firstName = firstName;
+        user.lastName = lastName;
+        user.passwordSalt  = BCrypt.gensalt(12);
+        user.passwordHash = BCrypt.hashpw(password, user.passwordSalt);
+        userDao.insertAll(user);
+
+        System.out.println("User: " + user.toString());
 
         db.close();
 
-        return new Result.Success<>(new Register());
+        return new Result.Success<>(this);
+    }
+
+    public String getDisplayName() {
+        return user.firstName + " " + user.lastName;
     }
 }

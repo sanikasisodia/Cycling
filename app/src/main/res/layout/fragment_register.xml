@@ -43,7 +43,10 @@
         android:id="@+id/role"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawSelectorOnTop = "true" />
+        android:drawSelectorOnTop = "true"
+        android:spinnerMode="dropdown"
+        android:entries="@array/roles"
+        android:prompt="@string/role_prompt" />
 
     <ProgressBar
         android:id="@+id/loading"

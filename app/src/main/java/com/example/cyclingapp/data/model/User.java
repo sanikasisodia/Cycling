@@ -1,13 +1,14 @@
 package com.example.cyclingapp.data.model;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
 public class User {
-    @PrimaryKey
-    public int id;
+    @PrimaryKey @NonNull
+    public String id;
 
     @ColumnInfo(name = "role")
     public Role role;
@@ -20,4 +21,10 @@ public class User {
 
     @ColumnInfo(name = "last_name")
     public String lastName;
+    
+    @ColumnInfo(name = "password_salt")
+    public String passwordSalt;
+    
+    @ColumnInfo(name = "password_hash")
+    public String passwordHash;
 }

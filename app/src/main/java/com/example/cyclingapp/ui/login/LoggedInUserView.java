@@ -5,13 +5,18 @@ package com.example.cyclingapp.ui.login;
  */
 class LoggedInUserView {
     private String displayName;
-    //... other data fields that may be accessible to the UI
+    private String role;
 
-    LoggedInUserView(String displayName) {
+    LoggedInUserView(String displayName, String role) {
         this.displayName = displayName;
+        this.role = role;
     }
 
     String getDisplayName() {
         return displayName;
+    }
+
+    public String getRole() {
+        return role;
     }
 }
