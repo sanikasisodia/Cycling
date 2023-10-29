@@ -2,11 +2,22 @@ package com.example.cyclingapp;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.room.Room;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
+
+import com.example.cyclingapp.data.model.AppDatabase;
+import com.example.cyclingapp.data.model.Event;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,12 +28,12 @@ public class EventCreateFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private EditText editName, editEventDetails, editParticipationCount, editFee;
+    private Spinner eventType;
+    private RadioGroup radioDifficulty;
+    private Button btnCreate;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public EventCreateFragment() {
         // Required empty public constructor
@@ -37,6 +48,9 @@ public class EventCreateFragment extends Fragment {
      * @return A new instance of fragment EventCreateFragment.
      */
     // TODO: Rename and change types and number of parameters
+    private String mParam1;
+    private String mParam2;
+
     public static EventCreateFragment newInstance(String param1, String param2) {
         EventCreateFragment fragment = new EventCreateFragment();
         Bundle args = new Bundle();
@@ -58,7 +72,78 @@ public class EventCreateFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_event_create, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        editName = view.findViewById(R.id.editName);
+        eventType = view.findViewById(R.id.eventType);
+        radioDifficulty = view.findViewById(R.id.radioDifficulty);
+        editEventDetails = view.findViewById(R.id.editEventDetails);
+        editParticipationCount = view.findViewById(R.id.editParticipationCount);
+        editFee = view.findViewById(R.id.editFee);
+        btnCreate = view.findViewById(R.id.btnCreate);
+
+        populateSpinner();
+
+        btnCreate.setOnClickListener(v -> createEvent());
+    }
+
+    private void populateSpinner() {
+        String[] eventTypes = {
+                "Time Trial", "Hill Climb", "Road Stage Race", "Road Race", "Group Rides"
+        };
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, eventTypes);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        eventType.setAdapter(adapter);
+    }
+
+    private void createEvent() {
+        String name = editName.getText().toString();
+        String type = eventType.getSelectedItem().toString();
+        String details = editEventDetails.getText().toString();
+
+        int difficultyId = radioDifficulty.getCheckedRadioButtonId();
+        String difficulty;
+        if (difficultyId == R.id.radioEasy) {
+            difficulty = "Easy";
+        } else if (difficultyId == R.id.radioMedium) {
+            difficulty = "Medium";
+        } else if (difficultyId == R.id.radioHard) {
+            difficulty = "Hard";
+        } else {
+            difficulty = "";
+        }
+
+
+        int participationCount;
+        double fee;
+        try {
+            participationCount = Integer.parseInt(editParticipationCount.getText().toString());
+            fee = Double.parseDouble(editFee.getText().toString());
+        } catch (NumberFormatException e) {
+            return;
+        }
+
+        if (name.isEmpty() || type.isEmpty() || difficulty.isEmpty() || details.isEmpty()) {
+            return;
+        }
+
+        Event newEvent = new Event(name, type, difficulty, details, participationCount, fee);
+        saveEvent(newEvent);
+    }
+
+    private void saveEvent(Event event) {
+        AppDatabase db = Room.databaseBuilder(getActivity().getApplicationContext(),
+                AppDatabase.class, "cycling-db").build();
+
+        new Thread(() -> {
+            db.eventDao().insertEvent(event);
+        }).start();
+
+        // Confirmation msg??
     }
 }
