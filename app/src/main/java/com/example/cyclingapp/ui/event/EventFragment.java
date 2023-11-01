@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,16 +22,17 @@ public class EventFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
         binding = FragmentEventBinding.inflate(inflater, container, false);
 
         Bundle bundle = getArguments();
         String displayName = bundle.getString("displayName");
         Role role = (Role) bundle.getSerializable("role");
-        binding.welcomeText.setText("Welcome, " + displayName + "!" + "\n" + "You are logged in as \"" + role + "\".");
+
+        String welcomeMessage = "Welcome, " + displayName + "!" + "\n" + "You are logged in as \"" + role + "\".";
+        Toast.makeText(getActivity(), welcomeMessage, Toast.LENGTH_LONG).show();
 
         // Enable button only if the user is an admin
-        if (role.equals(Role.ADMIN)) {
+        if (role != null && role.equals(Role.ADMIN)) {
             binding.btnAdd.setEnabled(true);
         }
 
@@ -40,5 +42,6 @@ public class EventFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
     }
 }
