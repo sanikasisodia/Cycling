@@ -1,13 +1,15 @@
 package com.example.cyclingapp.ui.login;
 
+import com.example.cyclingapp.data.model.Role;
+
 /**
  * Class exposing authenticated user details to the UI.
  */
 class LoggedInUserView {
     private String displayName;
-    private String role;
+    private Role role;
 
-    LoggedInUserView(String displayName, String role) {
+    LoggedInUserView(String displayName, Role role) {
         this.displayName = displayName;
         this.role = role;
     }
@@ -16,7 +18,7 @@ class LoggedInUserView {
         return displayName;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 }

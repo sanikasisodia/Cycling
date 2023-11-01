@@ -1,4 +1,4 @@
-package com.example.cyclingapp;
+package com.example.cyclingapp.ui.event;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.room.Room;
 
+import com.example.cyclingapp.R;
 import com.example.cyclingapp.data.model.AppDatabase;
 import com.example.cyclingapp.data.model.Event;
 

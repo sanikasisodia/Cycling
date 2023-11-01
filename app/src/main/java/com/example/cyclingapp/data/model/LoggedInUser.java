@@ -12,7 +12,7 @@ public class LoggedInUser {
 
     private String userId;
     private String displayName;
-    private String role;
+    private Role role;
 
     public LoggedInUser(String email, String password) {
         AppDatabase db = Room.databaseBuilder(App.getAppContext(), AppDatabase.class, "database-name").allowMainThreadQueries().build();
@@ -23,7 +23,7 @@ public class LoggedInUser {
             if (user.email.equals(email) && BCrypt.checkpw(password, user.passwordHash)) {
                 userId = user.id;
                 displayName = user.firstName + " " + user.lastName;
-                role = String.valueOf(user.role);
+                role = user.role;
             }
         }
 
@@ -42,7 +42,7 @@ public class LoggedInUser {
         return displayName;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 }

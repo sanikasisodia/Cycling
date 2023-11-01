@@ -1,4 +1,4 @@
-package com.example.cyclingapp;
+package com.example.cyclingapp.ui.event;
 
 import android.os.Bundle;
 
@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
+import com.example.cyclingapp.R;
 import com.example.cyclingapp.data.model.AppDatabase;
 import com.example.cyclingapp.data.model.Event;
 

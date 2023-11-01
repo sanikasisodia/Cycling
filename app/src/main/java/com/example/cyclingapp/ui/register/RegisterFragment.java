@@ -26,7 +26,6 @@ import com.example.cyclingapp.R;
 import com.example.cyclingapp.data.model.Role;
 import com.example.cyclingapp.databinding.FragmentRegisterBinding;
 import com.example.cyclingapp.ui.login.LoginFragment;
-import com.example.cyclingapp.ui.welcome.WelcomeFragment;
 
 public class RegisterFragment extends Fragment {
 

@@ -21,12 +21,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.cyclingapp.MainActivity;
 import com.example.cyclingapp.databinding.FragmentLoginBinding;
 
 import com.example.cyclingapp.R;
+import com.example.cyclingapp.ui.event.EventFragment;
 import com.example.cyclingapp.ui.register.RegisterFragment;
-import com.example.cyclingapp.ui.welcome.WelcomeFragment;
 
 public class LoginFragment extends Fragment {
 
@@ -146,13 +145,13 @@ public class LoginFragment extends Fragment {
         if (getContext() != null && getContext().getApplicationContext() != null) {
             Bundle args = new Bundle();
             args.putString("displayName", model.getDisplayName());
-            args.putString("role", model.getRole());
-            WelcomeFragment welcomeFragment = new WelcomeFragment();
-            welcomeFragment.setArguments(args);
+            args.putSerializable("role", model.getRole());
+            EventFragment eventFragment = new EventFragment();
+            eventFragment.setArguments(args);
 
             ViewGroup fragmentContainerView = getActivity().findViewById(R.id.fragment_container_view);
             getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(fragmentContainerView.getId(), welcomeFragment, null)
+                    .replace(fragmentContainerView.getId(), eventFragment, null)
                     .setReorderingAllowed(true)
                     .addToBackStack(null)
                     .commit();
