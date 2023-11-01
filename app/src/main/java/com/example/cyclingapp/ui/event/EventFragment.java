@@ -9,7 +9,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.example.cyclingapp.R;
 import com.example.cyclingapp.data.model.Role;
 import com.example.cyclingapp.databinding.FragmentEventBinding;
 
@@ -34,9 +37,23 @@ public class EventFragment extends Fragment {
         // Enable button only if the user is an admin
         if (role != null && role.equals(Role.ADMIN)) {
             binding.btnAdd.setEnabled(true);
+            binding.btnAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    navigateToEventCreateFragment();
+                }
+            });
         }
-
         return binding.getRoot();
+    }
+
+    private void navigateToEventCreateFragment() {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        EventCreateFragment eventCreateFragment = new EventCreateFragment();
+        fragmentTransaction.replace(R.id.fragmentContainerView, eventCreateFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     @Override

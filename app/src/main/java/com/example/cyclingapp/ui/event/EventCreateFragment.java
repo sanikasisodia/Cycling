@@ -145,6 +145,6 @@ public class EventCreateFragment extends Fragment {
             db.eventDao().insertEvent(event);
         }).start();
 
-        // Confirmation msg??
+        getActivity().onBackPressed();
     }
 }
