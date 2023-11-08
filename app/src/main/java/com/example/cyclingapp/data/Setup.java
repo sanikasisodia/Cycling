@@ -15,8 +15,6 @@ public class Setup {
     public Setup() {
         AppDatabase db = Room.databaseBuilder(App.getAppContext(), AppDatabase.class, "database-name").allowMainThreadQueries().build();
         UserDao userDao = db.userDao();
-        EventDao eventDao = db.eventDao();
-
         User user = new User();
         user.id = java.util.UUID.randomUUID().toString();
         user.role = Role.ADMIN;
