@@ -14,6 +14,10 @@ import androidx.fragment.app.Fragment;
 import com.example.cyclingapp.data.model.Role;
 import com.example.cyclingapp.databinding.FragmentEventBinding;
 
+/**
+ * A {@link Fragment} that shows options related to events in the cycling app.
+ * It allows navigating to event creation or listing based on the user's role.
+ */
 public class EventFragment extends Fragment {
 
     private FragmentEventBinding binding;
@@ -23,35 +27,47 @@ public class EventFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        // Inflate the layout for this fragment with View Binding
         binding = FragmentEventBinding.inflate(inflater, container, false);
 
+        // Get any arguments passed to the fragment
         Bundle bundle = getArguments();
         if (bundle != null) {
             String displayName = bundle.getString("displayName", "User");
             Role role = (Role) bundle.getSerializable("role");
-
+            // Create and show a welcome message
             String welcomeMessage = "Welcome, " + displayName + "!" + "\n" + "You are logged in as \"" + role + "\".";
             Toast.makeText(getActivity(), welcomeMessage, Toast.LENGTH_LONG).show();
 
-            // Enable button only if the user is an admin
+            // Enable event creation button only if the user is an admin
             if (role != null && role.equals(Role.ADMIN)) {
                 binding.btnAdd.setEnabled(true);
                 binding.btnAdd.setOnClickListener(v -> navigateToEventCreate());
             }
         }
 
+        // Set up listeners for other UI components
         binding.btnList.setOnClickListener(v -> navigateToEventList());
 
+        // Return the root view of the inflated layout
         return binding.getRoot();
     }
 
+    /**
+     * Navigates to the EventCreate activity.
+     */
     private void navigateToEventCreate() {
         Intent intent = new Intent(getActivity(), EventCreate.class);
         startActivity(intent);
     }
 
+    /**
+     * Navigates to the EventList activity.
+     */
     private void navigateToEventList() {
         Intent intent = new Intent(getActivity(), EventList.class);
+        Role role = (Role) getArguments().getSerializable("role");
+        intent.putExtra("role", role);
         startActivity(intent);
     }
 

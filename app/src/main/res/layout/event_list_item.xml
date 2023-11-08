@@ -33,13 +33,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Edit"
-            android:layout_marginRight="8dp" />
+            android:layout_marginRight="8dp"/>
 
         <Button
             android:id="@+id/btnDeleteEvent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Delete" />
+            android:text="Delete"/>
 
     </LinearLayout>
 

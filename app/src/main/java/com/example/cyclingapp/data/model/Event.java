@@ -2,20 +2,35 @@ package com.example.cyclingapp.data.model;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import java.io.Serializable;
 
+/**
+ * Represents a cycling event entity in the application.
+ * This class is a model for Room database to create, read, update,
+ * and delete cycling events within the app's local database.
+ */
 @Entity(tableName = "events")
-public class Event {
+public class Event implements Serializable {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-    private String name;
-    private String type;
-    private String difficulty;
-    private String details;
-    private int participationCount;
-    private double fee;
+    @PrimaryKey(autoGenerate = true)  // Unique ID for the database entry, auto-generated
+    private int id;                   // Identifier for the event
+    private String name;              // Name of the event
+    private String type;              // Type of the event (e.g., race, casual, etc.)
+    private String difficulty;        // Difficulty level of the event
+    private String details;           // Details about the event
+    private int participationCount;   // Number of participants in the event
+    private double fee;               // Registration fee for the event
 
-    // Constructor
+    /**
+     * Constructor for Event class.
+     *
+     * @param name              Name of the event.
+     * @param type              Type of the event.
+     * @param difficulty        Difficulty level of the event.
+     * @param details           Detailed description of the event.
+     * @param participationCount Number of participants in the event.
+     * @param fee               Registration fee for the event.
+     */
     public Event(String name, String type, String difficulty, String details, int participationCount, double fee) {
         this.name = name;
         this.type = type;
@@ -25,7 +40,7 @@ public class Event {
         this.fee = fee;
     }
 
-    // Getters and Setters
+    // Getters and setters
 
     public int getId() {
         return id;
