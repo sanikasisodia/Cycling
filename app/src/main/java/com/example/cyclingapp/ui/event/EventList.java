@@ -20,11 +20,11 @@ import java.util.List;
  */
 public class EventList extends AppCompatActivity implements EventAdapter.EventAdapterListener {
 
-    private RecyclerView recyclerView;
-    private EventAdapter adapter;
-    private AppDatabase db;
+    private RecyclerView recyclerView; // RecyclerView to display the list of events
+    private EventAdapter adapter; // Adapter for the RecyclerView
+    private AppDatabase db; // Database instance
 
-    private List<Event> eventList = new ArrayList<>();
+    private List<Event> eventList = new ArrayList<>(); // List of events
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

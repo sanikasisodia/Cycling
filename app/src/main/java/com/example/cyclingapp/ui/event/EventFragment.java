@@ -20,7 +20,7 @@ import com.example.cyclingapp.databinding.FragmentEventBinding;
  */
 public class EventFragment extends Fragment {
 
-    private FragmentEventBinding binding;
+    private FragmentEventBinding binding; // View binding for the fragment
 
     @Nullable
     @Override
@@ -66,6 +66,8 @@ public class EventFragment extends Fragment {
      */
     private void navigateToEventList() {
         Intent intent = new Intent(getActivity(), EventList.class);
+
+        // Pass the role to the EventList activity
         Role role = (Role) getArguments().getSerializable("role");
         intent.putExtra("role", role);
         startActivity(intent);

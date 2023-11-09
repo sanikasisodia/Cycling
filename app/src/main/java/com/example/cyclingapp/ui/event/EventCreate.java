@@ -71,6 +71,7 @@ public class EventCreate extends AppCompatActivity {
      * @param eventToEdit The event to edit.
      */
     private void populateFieldsForEdit(Event eventToEdit) {
+        // Set the UI fields to the event's data
         editName.setText(eventToEdit.getName());
         editEventDetails.setText(eventToEdit.getDetails());
         eventType.setSelection(((ArrayAdapter<String>) eventType.getAdapter()).getPosition(eventToEdit.getType()));
@@ -127,7 +128,10 @@ public class EventCreate extends AppCompatActivity {
      * @return A string representing the selected difficulty.
      */
     private String getDifficultyString(int difficultyId) {
-        String difficulty;
+        String difficulty;  // The difficulty string to return
+
+
+        // Get the selected radio button ID
         if (difficultyId == R.id.radioEasy) {
             difficulty = "Easy";
         } else if (difficultyId == R.id.radioMedium) {
@@ -145,9 +149,12 @@ public class EventCreate extends AppCompatActivity {
      * Populates the event type spinner with options.
      */
     private void populateSpinner() {
+        // Create an ArrayAdapter using the string array and a default spinner layout
         String[] eventTypes = {
                 "Time Trial", "Hill Climb", "Road Stage Race", "Road Race", "Group Rides"
         };
+
+        // Apply the adapter to the spinner
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, eventTypes);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         eventType.setAdapter(adapter);
@@ -159,6 +166,7 @@ public class EventCreate extends AppCompatActivity {
      * Exits if inputs are invalid or parsing fails.
      */
     private void createEvent() {
+        // Extract data from UI components
         String name = editName.getText().toString();
         String type = eventType.getSelectedItem().toString();
         String details = editEventDetails.getText().toString();

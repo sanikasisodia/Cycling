@@ -19,18 +19,18 @@ import java.util.List;
  */
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
 
-    private List<Event> events;
-    private final EventAdapterListener listener;
+    private List<Event> events; // Cached copy of events
+    private final EventAdapterListener listener; // Listener for edit and delete actions
 
-    private Role userRole;
+    private Role userRole; // The role of the user
 
 
     /**
      * Listener interface to handle click events on buttons in each list item.
      */
     public interface EventAdapterListener {
-        void onEditClick(Event event);
-        void onDeleteClick(Event event);
+        void onEditClick(Event event); // Called when the edit button is clicked
+        void onDeleteClick(Event event); // Called when the delete button is clicked
     }
 
     /**
@@ -55,14 +55,32 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         notifyDataSetChanged(); // Notify any registered observers that the data set has changed.
     }
 
+
+    /**
+     * Creates a new ViewHolder for the Event list items. This method is called when the RecyclerView needs a new ViewHolder
+     * to represent an item.
+     *
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to an adapter position.
+     * @param viewType The view type of the new View, for different types of items in the RecyclerView.
+     * @return A new ViewHolder that holds a View of the event_list_item layout type.
+     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_list_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_list_item, parent, false); // Inflate the layout
         return new ViewHolder(view, listener);
     }
 
+    /**
+     * Binds the data to the ViewHolder for each item in the RecyclerView. This method is called by the RecyclerView to
+     * display the data at the specified position.
+     *
+     * @param holder   The ViewHolder which should be updated to represent the contents of the item at the given position
+     *                 in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        // Get the event at the current position
         Event event = events.get(position);
         holder.setCurrentEvent(event);
         holder.tvEventName.setText(event.getName());
@@ -79,7 +97,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         }
     }
 
-
+    /**
+     * Returns the total number of items in the data set held by the adapter.
+     *
+     * @return The size of the events list, representing the number of items in the data set held by the adapter.
+     */
     @Override
     public int getItemCount() {
         return events.size();
@@ -89,12 +111,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
      * ViewHolder class for layout of each list item.
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvEventName, tvEventType, tvEventDifficulty;
-        public Button btnEditEvent, btnDeleteEvent;
+        public TextView tvEventName, tvEventType, tvEventDifficulty; // UI elements
+        public Button btnEditEvent, btnDeleteEvent; // UI elements
         private Event currentEvent; // Holds the current event
 
         public ViewHolder(View itemView, final EventAdapterListener listener) {
             super(itemView);
+
+            // Initialize UI elements
             tvEventName = itemView.findViewById(R.id.tvEventName);
             tvEventType = itemView.findViewById(R.id.tvEventType);
             tvEventDifficulty = itemView.findViewById(R.id.tvEventDifficulty);
@@ -115,6 +139,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             });
         }
 
+        /**
+         * Sets the current Event object to the ViewHolder. This method is used to keep a reference
+         * to the current Event associated with this ViewHolder, which may be used for further
+         * operations like event modifications or deletions.
+         *
+         * @param event The Event object to be set as the current event for this ViewHolder.
+         */
         public void setCurrentEvent(Event event) {
             this.currentEvent = event;
         }
