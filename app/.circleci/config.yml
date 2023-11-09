@@ -24,7 +24,7 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
           ###runs unit tests in test folder
-          name: Run UnitTest
+          name: Run ExampleUnitTest
           command: ./gradlew test
           ##stores artifacts in this place if build is successful
       - store_artifacts:
