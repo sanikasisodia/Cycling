@@ -1,13 +1,12 @@
 version: 2
 jobs:
   build:
-    ###Name of project
     working_directory: ~/CyclingApp
     docker:
-      ###changes SDK version to current version
       - image: circleci/android:api-34
     environment:
       JVM_OPTS: -Xmx3200m
+      GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2'
     steps:
       - checkout
       - restore_cache:
@@ -23,13 +22,21 @@ jobs:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
-          ###runs unit tests in test folder
-          name: Run InstrumentedTest
-          command: ./gradlew test
-          ##stores artifacts in this place if build is successful
+          name: Start Emulator
+          command: |
+            echo y | sdkmanager "platforms;android-28" "system-images;android-29;default;x86"
+            echo no | avdmanager create avd -n test -k "system-images;android-29;default;x86" --force
+            $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window -no-boot-anim -accel on &
+            sleep 30
+      - run:
+          name: Wait for Emulator
+          command: |
+            adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
+      - run:
+          name: Run Instrumented Tests
+          command: ./gradlew connectedAndroidTest
       - store_artifacts:
           path: app/build/outputs/apk/debug/
           destination: apks/
-          ##results stored in this path
       - store_test_results:
           path: app/build/test-results
