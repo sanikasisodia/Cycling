@@ -93,8 +93,8 @@ public class EventCreate extends AppCompatActivity {
         String difficulty = getDifficultyString(difficultyId);
 
         // Parse numerical fields
-        int participationCount;
-        double fee;
+        int participationCount = 0;
+        double fee = 0;
         try {
             participationCount = Integer.parseInt(editParticipationCount.getText().toString());
             fee = Double.parseDouble(editFee.getText().toString());
@@ -104,7 +104,7 @@ public class EventCreate extends AppCompatActivity {
         }
 
         // Validate that all fields are filled
-        if (name.isEmpty() || type.isEmpty() || difficulty.isEmpty() || details.isEmpty()) {
+        if (name.isEmpty() || type.isEmpty() || difficulty.isEmpty() || details.isEmpty() ) {
             Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -174,6 +174,8 @@ public class EventCreate extends AppCompatActivity {
         // Get the selected radio button ID
         int difficultyId = radioDifficulty.getCheckedRadioButtonId();
         String difficulty;
+
+
         if (difficultyId == R.id.radioEasy) {
             difficulty = "Easy";
         } else if (difficultyId == R.id.radioMedium) {
@@ -184,9 +186,16 @@ public class EventCreate extends AppCompatActivity {
             difficulty = "";
         }
 
+        // Validate that all fields are filled
+        if (name.isEmpty() || type.isEmpty() || difficulty.isEmpty() || details.isEmpty()) {
+            Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
         // Parse numerical fields
-        int participationCount;
-        double fee;
+        int participationCount = 0;
+        double fee = 0;
         try {
             participationCount = Integer.parseInt(editParticipationCount.getText().toString());
             fee = Double.parseDouble(editFee.getText().toString());
@@ -194,11 +203,6 @@ public class EventCreate extends AppCompatActivity {
             return;
         }
 
-
-        // Validate that all fields are filled
-        if (name.isEmpty() || type.isEmpty() || difficulty.isEmpty() || details.isEmpty()) {
-            return;
-        }
 
         // Create a new event object
         Event newEvent = new Event(name, type, difficulty, details, participationCount, fee);
