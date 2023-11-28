@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.cyclingapp.ProfileCreation;
+import com.example.cyclingapp.ProfilePage;
 import com.example.cyclingapp.data.model.Role;
 import com.example.cyclingapp.databinding.FragmentEventBinding;
 
@@ -40,7 +42,7 @@ public class EventFragment extends Fragment {
             Toast.makeText(getActivity(), welcomeMessage, Toast.LENGTH_LONG).show();
 
             // Enable event creation button only if the user is an admin
-            if (role != null && role.equals(Role.ADMIN)) {
+            if (role != null && (role.equals(Role.ADMIN) || role.equals(Role.CLUB))) {
                 binding.btnAdd.setEnabled(true);
                 binding.btnAdd.setOnClickListener(v -> navigateToEventCreate());
             }
@@ -48,6 +50,20 @@ public class EventFragment extends Fragment {
 
         // Set up listeners for other UI components
         binding.btnList.setOnClickListener(v -> navigateToEventList());
+
+        binding.viewProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), ProfilePage.class);
+            String displayName = getArguments().getString("displayName", null);
+            intent.putExtra("displayName", displayName);
+            startActivity(intent);
+        });
+
+        binding.createProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), ProfileCreation.class);
+            String displayName = getArguments().getString("displayName", null);
+            intent.putExtra("displayName", displayName);
+            startActivity(intent);
+        });
 
         // Return the root view of the inflated layout
         return binding.getRoot();

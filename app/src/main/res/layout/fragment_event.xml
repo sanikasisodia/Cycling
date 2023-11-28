@@ -43,6 +43,27 @@
             android:text="List of Events"
             android:textSize="18sp" />
 
+        <Button
+            android:id="@+id/viewProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="249dp"
+            android:layout_marginBottom="111dp"
+            android:text="View Profile" />
+
+        <Button
+            android:id="@+id/createProfile"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="242dp"
+            android:layout_marginBottom="171dp"
+            android:text="Create Profile" />
+
     </RelativeLayout>
 
 </FrameLayout>
