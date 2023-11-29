@@ -87,7 +87,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.tvEventType.setText(event.getType());
         holder.tvEventDifficulty.setText(event.getDifficulty());
 
-        // Show edit and delete buttons only if the user is an admin
+        // Show edit and delete buttons only if the user is an admin or club owner
         if (userRole != null && userRole.equals(Role.ADMIN)) {
             holder.btnEditEvent.setVisibility(View.VISIBLE);
             holder.btnDeleteEvent.setVisibility(View.VISIBLE);

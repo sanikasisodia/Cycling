@@ -25,6 +25,19 @@ public class Setup {
         user.passwordHash = BCrypt.hashpw("admin", user.passwordSalt);
         userDao.insertAll(user);
 
+        //Cycling club admin login for deliverable 3
+        UserDao user2Dao = db.userDao();
+        User user2 = new User();
+        user2.id = java.util.UUID.randomUUID().toString();
+        user2.role = Role.CLUB;
+        user2.email = "gccadmin";
+        user2.firstName = "GCADMIN";
+        user2.lastName = "USER";
+        String plainPassword = "GCCRocks!";
+        user2.passwordSalt = BCrypt.gensalt(12);
+        user2.passwordHash = BCrypt.hashpw(plainPassword, user2.passwordSalt);
+        user2Dao.insertAll(user2);
+
         db.close();
     }
 }

@@ -10,6 +10,9 @@ public class Validation {
         if (email.equals("admin")) {
             return true;
         }
+        if(email.equals("gccadmin")){
+            return true;
+        }
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
@@ -18,6 +21,9 @@ public class Validation {
             return false;
         }
         if (password.equals("admin")) {
+            return true;
+        }
+        if (password.equals("GCCRocks!")){
             return true;
         }
         return password.trim().length() > 5;

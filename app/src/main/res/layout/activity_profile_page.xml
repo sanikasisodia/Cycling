@@ -4,6 +4,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/Events"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -12,37 +13,49 @@
         <ImageView
             android:id="@+id/clubLogo"
             android:layout_width="100dp"
-            android:layout_gravity="center_horizontal"
             android:layout_height="100dp"
-            android:src="@drawable/ic_launcher_background"/>
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_launcher_background" />
+
         <TextView
             android:id="@+id/clubName"
             android:layout_width="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:text="Club Name"
-            android:textSize="24sp"/>
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/socialMediaLink"
             android:layout_width="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
-            android:text="Social Media Link"/>
+            android:layout_gravity="center_horizontal"
+            android:text="Social Media Link" />
 
         <TextView
             android:id="@+id/phoneNumber"
             android:layout_width="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
-            android:text="Phone Number"/>
+            android:layout_gravity="center_horizontal"
+            android:text="Phone Number" />
 
         <TextView
             android:id="@+id/mainContactName"
             android:layout_width="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
-            android:text="Main Contact Name"/>
+            android:layout_gravity="center_horizontal"
+            android:text="Main Contact Name" />
+
+        <TextView
+            android:id="@+id/EventsList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Events" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/clubEvents"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
 
     </LinearLayout>
