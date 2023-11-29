@@ -47,6 +47,10 @@ public interface EventDao {
     @Query("SELECT * FROM events")
     List<Event> getAllEvents();
 
+    @Query("SELECT * FROM events WHERE id = :userId")
+    List<Event> getEventsByUserId(String userId);
+
+
     /**
      * Retrieves a single event by its ID.
      *

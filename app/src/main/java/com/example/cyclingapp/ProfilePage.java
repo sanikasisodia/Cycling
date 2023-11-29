@@ -2,6 +2,7 @@ package com.example.cyclingapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
@@ -14,6 +15,13 @@ import android.widget.TextView;
 import android.widget.Button;
 
 import com.example.cyclingapp.data.model.ClubProfile;
+import com.example.cyclingapp.data.model.Event;
+import com.example.cyclingapp.data.model.Role;
+import com.example.cyclingapp.ui.event.EventAdapter;
+import com.example.cyclingapp.ui.event.EventViewModel;
+
+import java.util.ArrayList;
+
 
 /**
  * Activity for displaying and updating a club's profile.
@@ -27,6 +35,10 @@ public class ProfilePage extends AppCompatActivity {
     private TextView mainContactNameTextView; // TextView for displaying the main contact name
     private ImageView clubLogoImageView; // ImageView for displaying the club logo
 
+    private EventViewModel eventViewModel;
+    private EventAdapter eventAdapter;
+
+    private RecyclerView clubEventsRecyclerView;
     private ClubProfileViewModel clubProfileViewModel; // ViewModel for the club profile
 
     private int[] imageIds = new int[]{R.drawable.logo1, R.drawable.logo2, R.drawable.logo3};
@@ -50,14 +62,24 @@ public class ProfilePage extends AppCompatActivity {
         phoneNumberTextView = findViewById(R.id.phoneNumber);
         mainContactNameTextView = findViewById(R.id.mainContactName);
         clubLogoImageView = findViewById(R.id.clubLogo);
+        clubEventsRecyclerView = findViewById(R.id.clubEvents);
 
         clubLogoImageView.setOnClickListener(view -> showLogoSelectionDialog());
 
-        // Get ClubProfileViewModel
+        // Initialize RecyclerView for events
+        eventAdapter = new EventAdapter(new ArrayList<>(), EventAdapter.EventAdapterListener, Role.CLUB);
+        clubEventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        clubEventsRecyclerView.setAdapter(eventAdapter);
+
+        // Get ViewModel
+        eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
         clubProfileViewModel = new ViewModelProvider(this).get(ClubProfileViewModel.class);
 
         String displayName = getIntent().getStringExtra("displayName");
-
+        String userId = getUserId();
+        eventViewModel.getEventsByUserId(userId).observe(this, events -> {
+            eventAdapter.setEvents(events);
+        });
         if (displayName != null) {
             clubProfileViewModel.getProfileByDisplayName(displayName).observe(this, clubProfile -> {
                 if (clubProfile != null) {
@@ -66,6 +88,22 @@ public class ProfilePage extends AppCompatActivity {
             });
         }
     }
+
+    private String getUserId() {
+        // Retrieving the user ID passed through an Intent
+        String userId = getIntent().getStringExtra("USER_ID");
+        if (userId != null && !userId.isEmpty()) {
+            return userId;
+        }
+        return null;
+    }
+
+    private String getClubId() {
+        // Example of retrieving the club ID passed through an Intent
+        return getIntent().getStringExtra("CLUB_ID");
+    }
+
+
 
     /**
      * Updates the UI elements with the provided club profile data.
@@ -77,6 +115,16 @@ public class ProfilePage extends AppCompatActivity {
         socialMediaLinkTextView.setText(clubProfile.getSocialMediaLink());
         phoneNumberTextView.setText(clubProfile.getPhoneNumber());
         mainContactNameTextView.setText(clubProfile.getMainContactName());
+
+        //update UI with events
+        eventViewModel.getEventsByUserId(clubProfile.getUserId()).observe(this, events -> {
+            if (events != null) {
+                // Update RecyclerView adapter with the list of events
+                eventAdapter.setEvents(events);
+            } else {
+
+            }
+        });
     }
     /**
      * Displays a dialog allowing the user to select a logo from predefined drawable resources.
