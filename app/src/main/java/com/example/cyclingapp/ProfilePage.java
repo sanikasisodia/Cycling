@@ -150,4 +150,9 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
     @Override
     public void onDeleteClick(Event event) {
     }
+
+    @Override
+    public void onJoinClick(Event event) {
+
+    }
 }

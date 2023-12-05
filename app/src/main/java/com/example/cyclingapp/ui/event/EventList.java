@@ -1,7 +1,13 @@
 package com.example.cyclingapp.ui.event;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -90,5 +96,42 @@ public class EventList extends AppCompatActivity implements EventAdapter.EventAd
             db.eventDao().deleteEvent(event);
             loadEvents();
         }).start();
+    }
+
+    @Override
+    public void onJoinClick(Event event) {
+        // Inflate the dialog layout
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View dialogView = inflater.inflate(R.layout.dialog_join_event, null);
+
+        // Create the AlertDialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+
+        final EditText editTextName = dialogView.findViewById(R.id.editTextName);
+        final EditText editTextPhone = dialogView.findViewById(R.id.editTextPhone);
+
+        // Set up the buttons
+        // Set up the buttons
+        builder.setPositiveButton("Join", (dialog, which) -> {
+            String name = editTextName.getText().toString();
+            String phone = editTextPhone.getText().toString();
+
+            if (isValidPhoneNumber(phone)) {
+                Toast.makeText(this, "Successfully joined the event!", Toast.LENGTH_SHORT).show();
+            } else {
+                // If phone number is not valid
+                Toast.makeText(this, "Invalid phone number format.", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        String regex = "^[+]?[0-9]{10,13}$";
+        return phoneNumber.matches(regex);
     }
 }

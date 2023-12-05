@@ -32,6 +32,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     public interface EventAdapterListener {
         void onEditClick(Event event); // Called when the edit button is clicked
         void onDeleteClick(Event event); // Called when the delete button is clicked
+
+        void onJoinClick(Event event);
     }
 
     /**
@@ -96,6 +98,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             holder.btnEditEvent.setVisibility(View.GONE);
             holder.btnDeleteEvent.setVisibility(View.GONE);
         }
+
+        // Show the Join button for participant users
+        if (userRole != null && userRole.equals(Role.PARTICIPANT)) {
+            holder.btnJoinEvent.setVisibility(View.VISIBLE);
+        } else {
+            holder.btnJoinEvent.setVisibility(View.GONE);
+        }
     }
 
 
@@ -115,7 +124,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tvEventName, tvEventType, tvEventDifficulty; // UI elements
-        public Button btnEditEvent, btnDeleteEvent; // UI elements
+        public Button btnEditEvent, btnDeleteEvent, btnJoinEvent; // UI elements
         private Event currentEvent; // Holds the current event
 
         public ViewHolder(View itemView, final EventAdapterListener listener) {
@@ -138,6 +147,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             btnDeleteEvent.setOnClickListener(view -> {
                 if (currentEvent != null) {
                     listener.onDeleteClick(currentEvent);
+                }
+            });
+
+            btnJoinEvent = itemView.findViewById(R.id.btnJoinEvent);
+
+            btnJoinEvent.setOnClickListener(v -> {
+                if (listener != null && currentEvent != null) {
+                    listener.onJoinClick(currentEvent);
                 }
             });
         }
