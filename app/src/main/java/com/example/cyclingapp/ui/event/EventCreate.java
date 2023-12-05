@@ -61,6 +61,7 @@ public class EventCreate extends AppCompatActivity {
         if (getIntent().hasExtra("EDIT_EVENT")) {
             eventToEdit = (Event) getIntent().getSerializableExtra("EDIT_EVENT");
             populateFieldsForEdit(eventToEdit);
+            btnCreate.setText("Update");
         }
 
         btnCreate.setOnClickListener(v -> {

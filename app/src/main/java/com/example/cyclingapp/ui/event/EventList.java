@@ -3,6 +3,8 @@ package com.example.cyclingapp.ui.event;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -32,6 +34,8 @@ public class EventList extends AppCompatActivity implements EventAdapter.EventAd
 
     private List<Event> eventList = new ArrayList<>(); // List of events
 
+    private List<Event> filteredList = new ArrayList<>(); // List of filtered events
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,14 +50,39 @@ public class EventList extends AppCompatActivity implements EventAdapter.EventAd
         // Setup RecyclerView
         recyclerView = findViewById(R.id.rvEvents);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new EventAdapter(eventList, this, userRole );
+        adapter = new EventAdapter(filteredList, this, userRole);
         recyclerView.setAdapter(adapter);
 
         // Load events from the database
         loadEvents();
+
+        // Search bar
+        EditText editTextSearch = findViewById(R.id.editTextSearch);
+        editTextSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Can search for a cycling club: type of event, event name, club name
+                String searchText = editTextSearch.getText().toString().toLowerCase();
+                filteredList.clear();
+                for (Event event : eventList) {
+                    if (event.getName().toLowerCase().contains(searchText) || event.getType().toLowerCase().contains(searchText)) {
+                        filteredList.add(event);
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Do nothing
+            }
+        });
     }
-
-
 
 
     @Override
@@ -69,7 +98,11 @@ public class EventList extends AppCompatActivity implements EventAdapter.EventAd
     private void loadEvents() {
         new Thread(() -> {
             List<Event> events = db.eventDao().getAllEvents();
-            runOnUiThread(() -> adapter.setEvents(events));
+            eventList.clear();
+            eventList.addAll(events);
+            filteredList.clear();
+            filteredList.addAll(events);
+            runOnUiThread(() -> adapter.setEvents(filteredList));
         }).start();
     }
 
