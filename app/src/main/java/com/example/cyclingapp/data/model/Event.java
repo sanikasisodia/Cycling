@@ -21,6 +21,8 @@ public class Event implements Serializable {
     private int participationCount;   // Number of participants in the event
     private double fee;               // Registration fee for the event
 
+    private String currentUserId = LoggedInUser.getUserId();
+
     /**
      * Constructor for Event class.
      *
@@ -31,13 +33,14 @@ public class Event implements Serializable {
      * @param participationCount Number of participants in the event.
      * @param fee               Registration fee for the event.
      */
-    public Event(String name, String type, String difficulty, String details, int participationCount, double fee) {
+    public Event(String name, String type, String difficulty, String details, int participationCount, double fee, String currentUserId) {
         this.name = name;
         this.type = type;
         this.difficulty = difficulty;
         this.details = details;
         this.participationCount = participationCount;
         this.fee = fee;
+        this.currentUserId = currentUserId;
     }
 
     // Getters and setters
@@ -97,4 +100,8 @@ public class Event implements Serializable {
     public void setFee(double fee) {
         this.fee = fee;
     }
+
+    public String getCurrentUserId() {return currentUserId;}
+    public void setCurrentUserId(String currentUserId){this.currentUserId = currentUserId;}
+
 }

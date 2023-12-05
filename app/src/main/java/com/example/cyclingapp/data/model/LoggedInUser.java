@@ -10,9 +10,9 @@ import org.mindrot.jbcrypt.BCrypt;
  */
 public class LoggedInUser {
 
-    private String userId;
+    private static String userId;
     private String displayName;
-    private Role role;
+    private static Role role;
 
     public LoggedInUser(String email, String password) {
         AppDatabase db = Room.databaseBuilder(App.getAppContext(), AppDatabase.class, "database-name").allowMainThreadQueries().build();
@@ -34,7 +34,7 @@ public class LoggedInUser {
         db.close();
     }
 
-    public String getUserId() {
+    public static String getUserId() {
         return userId.toString();
     }
 
@@ -42,7 +42,7 @@ public class LoggedInUser {
         return displayName;
     }
 
-    public Role getRole() {
+    public static Role getRole() {
         return role;
     }
 }

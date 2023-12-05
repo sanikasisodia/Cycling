@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
 
-    public static EventAdapter.EventAdapterListener EventAdapterListener;
+    //public static EventAdapter.EventAdapterListener EventAdapterListener;
     private List<Event> events; // Cached copy of events
     private final EventAdapterListener listener; // Listener for edit and delete actions
 
@@ -88,7 +88,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.tvEventType.setText(event.getType());
         holder.tvEventDifficulty.setText(event.getDifficulty());
 
-        // Show edit and delete buttons only if the user is an admin or club owner
+        // Show edit and delete buttons only if the user is an admin
         if (userRole != null && userRole.equals(Role.ADMIN)) {
             holder.btnEditEvent.setVisibility(View.VISIBLE);
             holder.btnDeleteEvent.setVisibility(View.VISIBLE);
@@ -105,6 +105,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
      */
     @Override
     public int getItemCount() {
+
         return events.size();
     }
 

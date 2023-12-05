@@ -11,9 +11,12 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.cyclingapp.ClubProfileEventViewModel;
 import com.example.cyclingapp.R;
 import com.example.cyclingapp.data.model.AppDatabase;
+import com.example.cyclingapp.data.model.ClubProfile;
 import com.example.cyclingapp.data.model.Event;
+import com.example.cyclingapp.data.model.LoggedInUser;
 
 /**
  * Activity for creating a new event or editing an existing one in the cycling application.
@@ -26,8 +29,12 @@ public class EventCreate extends AppCompatActivity {
     private RadioGroup radioDifficulty;
     private Button btnCreate;
 
+    private ClubProfileEventViewModel clubProfileEventViewModel;
+
     // Event object for editing
     private Event eventToEdit;
+
+    private String currentUserId = LoggedInUser.getUserId();
 
 
     @Override
@@ -91,6 +98,7 @@ public class EventCreate extends AppCompatActivity {
         String details = editEventDetails.getText().toString();
         int difficultyId = radioDifficulty.getCheckedRadioButtonId();
         String difficulty = getDifficultyString(difficultyId);
+        String currentUserId = LoggedInUser.getUserId();
 
         // Parse numerical fields
         int participationCount = 0;
@@ -116,6 +124,7 @@ public class EventCreate extends AppCompatActivity {
         eventToEdit.setDetails(details);
         eventToEdit.setParticipationCount(participationCount);
         eventToEdit.setFee(fee);
+
 
         // Save the updated event
         saveEvent(eventToEdit);
@@ -205,7 +214,7 @@ public class EventCreate extends AppCompatActivity {
 
 
         // Create a new event object
-        Event newEvent = new Event(name, type, difficulty, details, participationCount, fee);
+        Event newEvent = new Event(name, type, difficulty, details, participationCount, fee, currentUserId);
 
         // Save the event to the database
         saveEvent(newEvent);
@@ -231,7 +240,7 @@ public class EventCreate extends AppCompatActivity {
                 runOnUiThread(() -> Toast.makeText(EventCreate.this, "Event updated", Toast.LENGTH_SHORT).show());
             } else {
                 // If there's no ID, it's a new event, insert it into the database
-                db.eventDao().insertEvent(event);
+                clubProfileEventViewModel.insertEvent(event);
                 // Inform the user of the creation on the main thread
                 runOnUiThread(() -> Toast.makeText(EventCreate.this, "Event created", Toast.LENGTH_SHORT).show());
             }

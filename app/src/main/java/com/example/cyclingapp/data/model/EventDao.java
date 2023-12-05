@@ -1,5 +1,6 @@
 package com.example.cyclingapp.data.model;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -47,8 +48,10 @@ public interface EventDao {
     @Query("SELECT * FROM events")
     List<Event> getAllEvents();
 
-    @Query("SELECT * FROM events WHERE id = :userId")
-    List<Event> getEventsByUserId(String userId);
+    @Query("SELECT * FROM events WHERE currentUserId = :userId")
+    LiveData<List<Event>> getEventsByUserId(String userId);
+
+
 
 
     /**

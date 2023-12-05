@@ -1,5 +1,7 @@
 package com.example.cyclingapp;
 
+import static com.example.cyclingapp.ui.event.EventAdapter.EventAdapterListener;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -7,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.GridView;
@@ -16,9 +19,9 @@ import android.widget.Button;
 
 import com.example.cyclingapp.data.model.ClubProfile;
 import com.example.cyclingapp.data.model.Event;
+import com.example.cyclingapp.data.model.LoggedInUser;
 import com.example.cyclingapp.data.model.Role;
 import com.example.cyclingapp.ui.event.EventAdapter;
-import com.example.cyclingapp.ui.event.EventViewModel;
 
 import java.util.ArrayList;
 
@@ -27,7 +30,7 @@ import java.util.ArrayList;
  * Activity for displaying and updating a club's profile.
  * Provides functionality to view and edit club profile details, including selecting a club logo.
  */
-public class ProfilePage extends AppCompatActivity {
+public class ProfilePage extends AppCompatActivity implements EventAdapter.EventAdapterListener {
 
     private TextView clubNameTextView; // TextView for displaying the club name
     private TextView socialMediaLinkTextView; // TextView for displaying the social media link
@@ -35,11 +38,10 @@ public class ProfilePage extends AppCompatActivity {
     private TextView mainContactNameTextView; // TextView for displaying the main contact name
     private ImageView clubLogoImageView; // ImageView for displaying the club logo
 
-    private EventViewModel eventViewModel;
-    private EventAdapter eventAdapter;
-
+    private EventAdapter adapter;
     private RecyclerView clubEventsRecyclerView;
     private ClubProfileViewModel clubProfileViewModel; // ViewModel for the club profile
+    private ClubProfileEventViewModel clubProfileEventViewModel; //ViewModel for events
 
     private int[] imageIds = new int[]{R.drawable.logo1, R.drawable.logo2, R.drawable.logo3};
 
@@ -62,48 +64,47 @@ public class ProfilePage extends AppCompatActivity {
         phoneNumberTextView = findViewById(R.id.phoneNumber);
         mainContactNameTextView = findViewById(R.id.mainContactName);
         clubLogoImageView = findViewById(R.id.clubLogo);
-        clubEventsRecyclerView = findViewById(R.id.clubEvents);
+
 
         clubLogoImageView.setOnClickListener(view -> showLogoSelectionDialog());
 
-        // Initialize RecyclerView for events
-        eventAdapter = new EventAdapter(new ArrayList<>(), EventAdapter.EventAdapterListener, Role.CLUB);
-        clubEventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        clubEventsRecyclerView.setAdapter(eventAdapter);
-
         // Get ViewModel
-        eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
         clubProfileViewModel = new ViewModelProvider(this).get(ClubProfileViewModel.class);
+        clubProfileEventViewModel = new ViewModelProvider(this).get(ClubProfileEventViewModel.class);
+
 
         String displayName = getIntent().getStringExtra("displayName");
-        String userId = getUserId();
-        eventViewModel.getEventsByUserId(userId).observe(this, events -> {
-            eventAdapter.setEvents(events);
-        });
+
+        String userId = getIntent().getStringExtra("userId");
+
+
+        //Setup Recycler View
+        clubEventsRecyclerView = findViewById(R.id.clubEvents);
+        adapter = new EventAdapter(new ArrayList<>(), this, getUserRole());
+        clubEventsRecyclerView.setAdapter(adapter);
+        clubEventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
         if (displayName != null) {
             clubProfileViewModel.getProfileByDisplayName(displayName).observe(this, clubProfile -> {
                 if (clubProfile != null) {
                     updateUI(clubProfile);
                 }
             });
+            clubProfileEventViewModel.getEventsByUserId(userId).observe(this, event -> {
+                if (event != null && !event.isEmpty()) {
+                    adapter.setEvents(event);
+                } else {
+                    Log.d("ProfilePage", "No events found for this user"); // For debugging
+                }
+            });
+
         }
-    }
-
-    private String getUserId() {
-        // Retrieving the user ID passed through an Intent
-        String userId = getIntent().getStringExtra("USER_ID");
-        if (userId != null && !userId.isEmpty()) {
-            return userId;
         }
-        return null;
-    }
 
-    private String getClubId() {
-        // Example of retrieving the club ID passed through an Intent
-        return getIntent().getStringExtra("CLUB_ID");
-    }
-
-
+        private Role getUserRole() {
+        return LoggedInUser.getRole();
+        }
 
     /**
      * Updates the UI elements with the provided club profile data.
@@ -115,17 +116,12 @@ public class ProfilePage extends AppCompatActivity {
         socialMediaLinkTextView.setText(clubProfile.getSocialMediaLink());
         phoneNumberTextView.setText(clubProfile.getPhoneNumber());
         mainContactNameTextView.setText(clubProfile.getMainContactName());
-
-        //update UI with events
-        eventViewModel.getEventsByUserId(clubProfile.getUserId()).observe(this, events -> {
-            if (events != null) {
-                // Update RecyclerView adapter with the list of events
-                eventAdapter.setEvents(events);
-            } else {
-
-            }
-        });
     }
+
+    /** Add Events created by club to profile view
+     * **/
+
+
     /**
      * Displays a dialog allowing the user to select a logo from predefined drawable resources.
      * Updates the club logo ImageView with the selected image.
@@ -148,4 +144,11 @@ public class ProfilePage extends AppCompatActivity {
         dialog.show();
     }
 
+    @Override
+    public void onEditClick(Event event) {
+    }
+
+    @Override
+    public void onDeleteClick(Event event) {
+    }
 }

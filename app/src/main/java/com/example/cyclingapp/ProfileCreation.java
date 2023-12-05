@@ -66,40 +66,46 @@ public class ProfileCreation extends AppCompatActivity {
         // Checks if it starts with "http" or "https."
         return socialMediaLink.startsWith("http://") || socialMediaLink.startsWith("https://");
     }
-    private boolean saveProfile() {
+    private void saveProfile() {
         String clubName = clubNameEditText.getText().toString();
         String socialMediaLink = socialMediaLinkEditText.getText().toString();
         String phoneNumber = phoneNumberEditText.getText().toString();
         String mainContactName = mainContactNameEditText.getText().toString();
 
+
         // Check if phone number is empty
         if (phoneNumber.isEmpty()) {
             Toast.makeText(this, "Phone number cannot be empty", Toast.LENGTH_SHORT).show();
-            return false; // Return false to indicate validation failure
         }
 
         // Check if phone number is valid
         if (!isValidPhoneNumber(phoneNumber)) {
             Toast.makeText(this, "Invalid phone number format", Toast.LENGTH_SHORT).show();
-            return false; // Return false to indicate validation failure
         }
 
         // Check if social media link is empty
         if (socialMediaLink.isEmpty()) {
             Toast.makeText(this, "Social media link cannot be empty", Toast.LENGTH_SHORT).show();
-            return false; // Return false to indicate validation failure
         }
 
         // Check if social media link is valid
         if (!isValidSocialMediaLink(socialMediaLink)) {
             Toast.makeText(this, "Invalid social media link format", Toast.LENGTH_SHORT).show();
-            return false; // Return false to indicate validation failure
         }
 
         else {
-            Toast.makeText(this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
-            return false; // Return false to indicate validation failure
-        }
+            ClubProfile clubProfile = new ClubProfile();
+            clubProfile.setClubName(clubName);
+            clubProfile.setSocialMediaLink(socialMediaLink);
+            clubProfile.setPhoneNumber(phoneNumber);
+            clubProfile.setMainContactName(mainContactName);
+            clubProfile.setDisplayName(displayName); // Assuming you have this setter in ClubProfile
+
+
+            clubProfileViewModel.insertProfile(clubProfile);
+            Toast.makeText(this, "Profile saved", Toast.LENGTH_SHORT).show();
+            finish();        }
+
     }
 
 
