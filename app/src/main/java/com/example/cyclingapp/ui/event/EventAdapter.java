@@ -22,7 +22,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     //public static EventAdapter.EventAdapterListener EventAdapterListener;
     private List<Event> events; // Cached copy of events
     private final EventAdapterListener listener; // Listener for edit and delete actions
-
+    private List<Event> eventList;
     private Role userRole; // The role of the user
 
 
@@ -97,6 +97,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             holder.btnDeleteEvent.setVisibility(View.GONE);
         }
     }
+
 
     /**
      * Returns the total number of items in the data set held by the adapter.

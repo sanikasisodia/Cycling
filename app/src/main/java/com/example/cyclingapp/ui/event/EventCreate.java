@@ -77,6 +77,7 @@ public class EventCreate extends AppCompatActivity {
      * Populates the UI fields with data from the event being edited.
      * @param eventToEdit The event to edit.
      */
+
     private void populateFieldsForEdit(Event eventToEdit) {
         // Set the UI fields to the event's data
         editName.setText(eventToEdit.getName());
@@ -240,7 +241,7 @@ public class EventCreate extends AppCompatActivity {
                 runOnUiThread(() -> Toast.makeText(EventCreate.this, "Event updated", Toast.LENGTH_SHORT).show());
             } else {
                 // If there's no ID, it's a new event, insert it into the database
-                clubProfileEventViewModel.insertEvent(event);
+                db.eventDao().insertEvent(event);
                 // Inform the user of the creation on the main thread
                 runOnUiThread(() -> Toast.makeText(EventCreate.this, "Event created", Toast.LENGTH_SHORT).show());
             }

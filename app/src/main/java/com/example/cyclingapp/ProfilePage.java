@@ -79,8 +79,8 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
 
 
         //Setup Recycler View
-        clubEventsRecyclerView = findViewById(R.id.clubEvents);
-        adapter = new EventAdapter(new ArrayList<>(), this, getUserRole());
+        RecyclerView clubEventsRecyclerView = findViewById(R.id.clubEvents);
+        EventAdapter adapter = new EventAdapter(new ArrayList<>(), this, getUserRole());
         clubEventsRecyclerView.setAdapter(adapter);
         clubEventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -91,9 +91,9 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
                     updateUI(clubProfile);
                 }
             });
-            clubProfileEventViewModel.getEventsByUserId(userId).observe(this, event -> {
-                if (event != null && !event.isEmpty()) {
-                    adapter.setEvents(event);
+            clubProfileEventViewModel.getEventsByUserId(userId).observe(this, events -> {
+                if (events != null && !events.isEmpty()) {
+                    adapter.setEvents(events);
                 } else {
                     Log.d("ProfilePage", "No events found for this user"); // For debugging
                 }
@@ -120,7 +120,6 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
 
     /** Add Events created by club to profile view
      * **/
-
 
     /**
      * Displays a dialog allowing the user to select a logo from predefined drawable resources.
