@@ -99,7 +99,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.tvEventDifficulty.setText(event.getDifficulty());
 
         // Show edit and delete buttons only if the user is an admin or its an event made by the club logged in
-        if (userRole != null && userRole.equals(Role.ADMIN)|| userRole!= null && clubName.equals(displayName)) {
+        if (userRole != null && userRole.equals(Role.ADMIN)|| clubName!= null && clubName.equals(clubName)) {
             holder.btnEditEvent.setVisibility(View.VISIBLE);
             holder.btnDeleteEvent.setVisibility(View.VISIBLE);
         } else {
@@ -139,6 +139,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             super(itemView);
 
             // Initialize UI elements
+            tvClubName = itemView.findViewById(R.id.tvClubName);
             tvEventName = itemView.findViewById(R.id.tvEventName);
             tvEventType = itemView.findViewById(R.id.tvEventType);
             tvEventDifficulty = itemView.findViewById(R.id.tvEventDifficulty);
