@@ -22,15 +22,15 @@ import java.util.List;
  */
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
 
-    //public static EventAdapter.EventAdapterListener EventAdapterListener;
     private List<Event> events; // Cached copy of events
     private final EventAdapterListener listener; // Listener for edit and delete actions
     private List<Event> eventList;
     private Role userRole; // The role of the user
 
-    private EventCreate clubName; //name of club
+    private Event clubName; //name of club
 
     private LoggedInUser displayName; //display name
+    private String currentClubName = ClubProfile.getClubName();
 
 
     /**
@@ -99,12 +99,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.tvEventDifficulty.setText(event.getDifficulty());
 
         // Show edit and delete buttons only if the user is an admin or its an event made by the club logged in
-        if (userRole != null && userRole.equals(Role.ADMIN)|| clubName!= null && clubName.equals(clubName)) {
+        if (userRole != null && userRole.equals(Role.PARTICIPANT)) {
+            holder.btnEditEvent.setVisibility(View.INVISIBLE);
+            holder.btnDeleteEvent.setVisibility(View.INVISIBLE);
+        } else {
             holder.btnEditEvent.setVisibility(View.VISIBLE);
             holder.btnDeleteEvent.setVisibility(View.VISIBLE);
-        } else {
-            holder.btnEditEvent.setVisibility(View.GONE);
-            holder.btnDeleteEvent.setVisibility(View.GONE);
         }
 
         // Show the Join button for participant users
