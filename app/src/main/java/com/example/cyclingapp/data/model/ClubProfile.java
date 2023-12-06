@@ -10,7 +10,7 @@ public class ClubProfile {
     private int id;
 
     @ColumnInfo(name = "club_name")
-    private String clubName;
+    private static String clubName;
 
     @ColumnInfo(name = "social_media_link")
     private String socialMediaLink;
@@ -35,7 +35,7 @@ public class ClubProfile {
         return id;
     }
 
-    public String getClubName() {
+    public static String getClubName() {
         return clubName;
     }
 

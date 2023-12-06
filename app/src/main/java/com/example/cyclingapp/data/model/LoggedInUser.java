@@ -11,7 +11,7 @@ import org.mindrot.jbcrypt.BCrypt;
 public class LoggedInUser {
 
     private static String userId;
-    private String displayName;
+    private static String displayName;
     private static Role role;
 
     public LoggedInUser(String email, String password) {
@@ -38,7 +38,7 @@ public class LoggedInUser {
         return userId.toString();
     }
 
-    public String getDisplayName() {
+    public static String getDisplayName() {
         return displayName;
     }
 

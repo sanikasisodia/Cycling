@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,14 +24,15 @@ import com.example.cyclingapp.ui.event.EventList;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClubProfileEventViewModel extends AndroidViewModel {
+public class ClubProfileEventViewModel extends AndroidViewModel{
 
-    private RecyclerView recyclerView; // RecyclerView to display the list of events
-    private EventAdapter adapter; // Adapter for the RecyclerView
-    private AppDatabase db; // Database instance
-    private List<Event> eventList = new ArrayList<>(); // List of events
     private final EventDao eventDao;
-
+    /**
+     * Inserts an event profile into the database.
+     * The insertion is performed asynchronously.
+     *
+     * @param application The club profile's event to insert into the database.
+     */
     public ClubProfileEventViewModel(@NonNull Application application) {
         super(application);
         AppDatabase db = AppDatabase.getDatabase(application);
@@ -42,9 +44,15 @@ public class ClubProfileEventViewModel extends AndroidViewModel {
             eventDao.insertEvent(event);
         });
     }
-
-    public LiveData<List<Event>> getEventsByUserId(String userId) {
-        return eventDao.getEventsByUserId(userId);
+    /**
+     * Retrieves a club profile from the database based on the display name.
+     * This method returns a LiveData object containing the club profile.
+     *
+     * @param clubName The display name of the club profile to retrieve.
+     * @return LiveData containing the ClubProfileEvent object.
+     */
+    public LiveData<List<Event>> getEventsByClubName(String clubName) {
+        return eventDao.getEventsByClubName(clubName);
     }
 
 }

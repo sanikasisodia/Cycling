@@ -41,7 +41,7 @@ public class EventFragment extends Fragment {
             String welcomeMessage = "Welcome, " + displayName + "!" + "\n" + "You are logged in as \"" + role + "\".";
             Toast.makeText(getActivity(), welcomeMessage, Toast.LENGTH_LONG).show();
 
-            // Enable event creation button only if the user is an admin
+            // Enable event creation button only if the user is an admin or club
             if (role != null && (role.equals(Role.ADMIN) || role.equals(Role.CLUB))) {
                 binding.btnAdd.setEnabled(true);
                 binding.btnAdd.setOnClickListener(v -> navigateToEventCreate());

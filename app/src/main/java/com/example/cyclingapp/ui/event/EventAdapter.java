@@ -8,8 +8,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.cyclingapp.R;
+import com.example.cyclingapp.data.model.ClubProfile;
 import com.example.cyclingapp.data.model.Event;
 import com.example.cyclingapp.data.model.Role;
+import com.example.cyclingapp.data.model.LoggedInUser;
+
 
 import java.util.List;
 
@@ -24,6 +27,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     private final EventAdapterListener listener; // Listener for edit and delete actions
     private List<Event> eventList;
     private Role userRole; // The role of the user
+
+    private EventCreate clubName; //name of club
+
+    private LoggedInUser displayName; //display name
 
 
     /**
@@ -86,12 +93,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         // Get the event at the current position
         Event event = events.get(position);
         holder.setCurrentEvent(event);
+        holder.tvClubName.setText(event.getClubName());
         holder.tvEventName.setText(event.getName());
         holder.tvEventType.setText(event.getType());
         holder.tvEventDifficulty.setText(event.getDifficulty());
 
-        // Show edit and delete buttons only if the user is an admin
-        if (userRole != null && userRole.equals(Role.ADMIN)) {
+        // Show edit and delete buttons only if the user is an admin or its an event made by the club logged in
+        if (userRole != null && userRole.equals(Role.ADMIN)|| userRole!= null && clubName.equals(displayName)) {
             holder.btnEditEvent.setVisibility(View.VISIBLE);
             holder.btnDeleteEvent.setVisibility(View.VISIBLE);
         } else {
@@ -123,7 +131,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
      * ViewHolder class for layout of each list item.
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvEventName, tvEventType, tvEventDifficulty; // UI elements
+        public TextView tvClubName, tvEventName, tvEventType, tvEventDifficulty; // UI elements
         public Button btnEditEvent, btnDeleteEvent, btnJoinEvent; // UI elements
         private Event currentEvent; // Holds the current event
 

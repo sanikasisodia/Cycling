@@ -14,6 +14,8 @@ public class Event implements Serializable {
 
     @PrimaryKey(autoGenerate = true)  // Unique ID for the database entry, auto-generated
     private int id;                   // Identifier for the event
+
+    private String clubName;          //Name of club
     private String name;              // Name of the event
     private String type;              // Type of the event (e.g., race, casual, etc.)
     private String difficulty;        // Difficulty level of the event
@@ -21,29 +23,36 @@ public class Event implements Serializable {
     private int participationCount;   // Number of participants in the event
     private double fee;               // Registration fee for the event
 
-    private String currentUserId = LoggedInUser.getUserId();
+    private String displayName= LoggedInUser.getDisplayName();
 
     /**
      * Constructor for Event class.
      *
      * @param name              Name of the event.
+     * @param clubName          Name of club.
      * @param type              Type of the event.
      * @param difficulty        Difficulty level of the event.
      * @param details           Detailed description of the event.
      * @param participationCount Number of participants in the event.
      * @param fee               Registration fee for the event.
+     * @param displayName       Display name from profile
      */
-    public Event(String name, String type, String difficulty, String details, int participationCount, double fee, String currentUserId) {
+    public Event(String clubName, String name, String type, String difficulty, String details, int participationCount, double fee, String displayName) {
+        this.clubName = clubName;
         this.name = name;
         this.type = type;
         this.difficulty = difficulty;
         this.details = details;
         this.participationCount = participationCount;
         this.fee = fee;
-        this.currentUserId = currentUserId;
+        this.displayName = displayName;
     }
 
     // Getters and setters
+    public String getClubName(){
+        return clubName;
+    }
+    public void setClubName(String clubName){this.clubName = clubName;}
 
     public int getId() {
         return id;
@@ -101,7 +110,8 @@ public class Event implements Serializable {
         this.fee = fee;
     }
 
-    public String getCurrentUserId() {return currentUserId;}
-    public void setCurrentUserId(String currentUserId){this.currentUserId = currentUserId;}
+    public String getDisplayName() {return displayName;}
+
+    public void setDisplayName(String displayName){this.displayName = displayName;}
 
 }

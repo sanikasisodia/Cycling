@@ -3,11 +3,14 @@ package com.example.cyclingapp;
 import static com.example.cyclingapp.ui.event.EventAdapter.EventAdapterListener;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,13 +20,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Button;
 
+import com.example.cyclingapp.data.model.AppDatabase;
 import com.example.cyclingapp.data.model.ClubProfile;
 import com.example.cyclingapp.data.model.Event;
 import com.example.cyclingapp.data.model.LoggedInUser;
 import com.example.cyclingapp.data.model.Role;
 import com.example.cyclingapp.ui.event.EventAdapter;
+import com.example.cyclingapp.ui.event.EventCreate;
+import com.example.cyclingapp.ui.event.EventList;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -37,12 +45,13 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
     private TextView phoneNumberTextView; // TextView for displaying the phone number
     private TextView mainContactNameTextView; // TextView for displaying the main contact name
     private ImageView clubLogoImageView; // ImageView for displaying the club logo
-
-    private EventAdapter adapter;
-    private RecyclerView clubEventsRecyclerView;
     private ClubProfileViewModel clubProfileViewModel; // ViewModel for the club profile
     private ClubProfileEventViewModel clubProfileEventViewModel; //ViewModel for events
-
+    private RecyclerView recyclerView; // RecyclerView to display the list of events
+    private EventAdapter adapter; // Adapter for the RecyclerView
+    private AppDatabase db; // Database instance
+    private List<Event> eventList = new ArrayList<>(); // List of events
+    private List<Event> filteredList = new ArrayList<>(); // List of filtered events
     private int[] imageIds = new int[]{R.drawable.logo1, R.drawable.logo2, R.drawable.logo3};
 
     /**
@@ -57,6 +66,21 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_page);
+
+        // Initialize the database
+        db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "cycling-db").build();
+
+        Role userRole = (Role) getIntent().getSerializableExtra("role");
+
+        // Setup RecyclerView
+        recyclerView = findViewById(R.id.clubEvents);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new EventAdapter(filteredList, this, userRole);
+        recyclerView.setAdapter(adapter);
+
+        // Load events from the database
+        loadEvents();
 
         // Initialize UI components
         clubNameTextView = findViewById(R.id.clubName);
@@ -74,8 +98,7 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
 
 
         String displayName = getIntent().getStringExtra("displayName");
-
-        String userId = getIntent().getStringExtra("userId");
+        String clubName = getIntent().getStringExtra("clubName");
 
 
         //Setup Recycler View
@@ -91,8 +114,8 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
                     updateUI(clubProfile);
                 }
             });
-            clubProfileEventViewModel.getEventsByUserId(userId).observe(this, events -> {
-                if (events != null && !events.isEmpty()) {
+            clubProfileEventViewModel.getEventsByClubName(clubName).observe(this, events -> {
+                if (events != null ) {
                     adapter.setEvents(events);
                 } else {
                     Log.d("ProfilePage", "No events found for this user"); // For debugging
@@ -101,6 +124,32 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
 
         }
         }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Reload the events when resuming the activity
+        loadEvents();
+    }
+
+    private void loadEvents() {
+        String clubName = ClubProfile.getClubName();
+        // Observe the LiveData returned by the DAO
+        db.eventDao().getEventsByClubName(clubName).observe(this, events -> {
+            // This code block will be executed when the LiveData's data changes
+            eventList.clear();
+            if (events != null) {
+                eventList.addAll(events);
+            }
+            filteredList.clear();
+            filteredList.addAll(eventList);
+            // Since this observer callback is already on the main thread, no need to use runOnUiThread
+            adapter.setEvents(filteredList);
+            adapter.notifyDataSetChanged();
+
+        });
+    }
+
 
         private Role getUserRole() {
         return LoggedInUser.getRole();
@@ -145,10 +194,22 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
 
     @Override
     public void onEditClick(Event event) {
+        Intent intent = new Intent(ProfilePage.this, EventCreate.class);
+        intent.putExtra("EDIT_EVENT", event);
+        startActivity(intent);
     }
 
+    /**
+     * Handles the delete button click for an event.
+     *
+     * @param event The event to delete.
+     */
     @Override
     public void onDeleteClick(Event event) {
+        new Thread(() -> {
+            db.eventDao().deleteEvent(event);
+            loadEvents();
+        }).start();
     }
 
     @Override

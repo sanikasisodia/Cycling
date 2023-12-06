@@ -24,7 +24,7 @@ import com.example.cyclingapp.data.model.LoggedInUser;
 public class EventCreate extends AppCompatActivity {
 
     // UI elements
-    private EditText editName, editEventDetails, editParticipationCount, editFee;
+    private EditText editClubName, editName, editEventDetails, editParticipationCount, editFee;
     private Spinner eventType;
     private RadioGroup radioDifficulty;
     private Button btnCreate;
@@ -34,7 +34,7 @@ public class EventCreate extends AppCompatActivity {
     // Event object for editing
     private Event eventToEdit;
 
-    private String currentUserId = LoggedInUser.getUserId();
+    private String displayName = LoggedInUser.getDisplayName();
 
 
     @Override
@@ -43,6 +43,7 @@ public class EventCreate extends AppCompatActivity {
         setContentView(R.layout.activity_event_create);
 
         // Initialize UI components
+        editClubName = findViewById(R.id.editClubName);
         editName = findViewById(R.id.editName);
         eventType = findViewById(R.id.eventType);
         radioDifficulty = findViewById(R.id.radioDifficulty);
@@ -88,6 +89,7 @@ public class EventCreate extends AppCompatActivity {
                 eventToEdit.getDifficulty().equals("Medium") ? R.id.radioMedium : R.id.radioHard);
         editParticipationCount.setText(String.valueOf(eventToEdit.getParticipationCount()));
         editFee.setText(String.valueOf(eventToEdit.getFee()));
+
     }
 
     /**
@@ -98,9 +100,10 @@ public class EventCreate extends AppCompatActivity {
         String name = editName.getText().toString();
         String type = eventType.getSelectedItem().toString();
         String details = editEventDetails.getText().toString();
+        String clubName = editClubName.getText().toString();
         int difficultyId = radioDifficulty.getCheckedRadioButtonId();
         String difficulty = getDifficultyString(difficultyId);
-        String currentUserId = LoggedInUser.getUserId();
+        String displayName = LoggedInUser.getDisplayName();
 
         // Parse numerical fields
         int participationCount = 0;
@@ -114,18 +117,20 @@ public class EventCreate extends AppCompatActivity {
         }
 
         // Validate that all fields are filled
-        if (name.isEmpty() || type.isEmpty() || difficulty.isEmpty() || details.isEmpty() ) {
+        if (clubName.isEmpty()||name.isEmpty() || type.isEmpty() || difficulty.isEmpty() || details.isEmpty() ) {
             Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Set the updated values to the eventToEdit object
+        eventToEdit.setClubName(clubName);
         eventToEdit.setName(name);
         eventToEdit.setType(type);
         eventToEdit.setDifficulty(difficulty);
         eventToEdit.setDetails(details);
         eventToEdit.setParticipationCount(participationCount);
         eventToEdit.setFee(fee);
+        eventToEdit.setDisplayName(displayName);
 
 
         // Save the updated event
@@ -178,6 +183,7 @@ public class EventCreate extends AppCompatActivity {
      */
     private void createEvent() {
         // Extract data from UI components
+        String clubName = editClubName.getText().toString();
         String name = editName.getText().toString();
         String type = eventType.getSelectedItem().toString();
         String details = editEventDetails.getText().toString();
@@ -198,11 +204,10 @@ public class EventCreate extends AppCompatActivity {
         }
 
         // Validate that all fields are filled
-        if (name.isEmpty() || type.isEmpty() || difficulty.isEmpty() || details.isEmpty()) {
+        if (clubName.isEmpty()||name.isEmpty() || type.isEmpty() || difficulty.isEmpty() || details.isEmpty()) {
             Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
             return;
         }
-
 
         // Parse numerical fields
         int participationCount = 0;
@@ -216,7 +221,7 @@ public class EventCreate extends AppCompatActivity {
 
 
         // Create a new event object
-        Event newEvent = new Event(name, type, difficulty, details, participationCount, fee, currentUserId);
+        Event newEvent = new Event(clubName, name, type, difficulty, details, participationCount, fee, displayName);
 
         // Save the event to the database
         saveEvent(newEvent);
@@ -243,6 +248,7 @@ public class EventCreate extends AppCompatActivity {
             } else {
                 // If there's no ID, it's a new event, insert it into the database
                 db.eventDao().insertEvent(event);
+                clubProfileEventViewModel.insertEvent(event);
                 // Inform the user of the creation on the main thread
                 runOnUiThread(() -> Toast.makeText(EventCreate.this, "Event created", Toast.LENGTH_SHORT).show());
             }

@@ -48,8 +48,8 @@ public interface EventDao {
     @Query("SELECT * FROM events")
     List<Event> getAllEvents();
 
-    @Query("SELECT * FROM events WHERE currentUserId = :userId")
-    LiveData<List<Event>> getEventsByUserId(String userId);
+    @Query("SELECT * FROM events WHERE clubName= :clubName")
+    LiveData<List<Event>> getEventsByClubName(String clubName);
 
 
 
