@@ -238,7 +238,6 @@ public class EventCreate extends AppCompatActivity {
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "cycling-db").build();
 
-        // Run database operations in a separate thread to avoid blocking the UI
         new Thread(() -> {
             // Check if the event already has an ID, indicating it's an update
             if (event.getId() > 0) {
@@ -252,6 +251,7 @@ public class EventCreate extends AppCompatActivity {
                 // Inform the user of the creation on the main thread
                 runOnUiThread(() -> Toast.makeText(EventCreate.this, "Event created", Toast.LENGTH_SHORT).show());
             }
+            finish();
         }).start();
     }
 

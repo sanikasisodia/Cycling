@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.cyclingapp.data.model.ClubProfile;
+import com.example.cyclingapp.data.model.ClubProfileDao;
+import com.example.cyclingapp.ui.event.EventFragment;
 
 /**
  * Activity for creating a new club profile.
@@ -23,6 +25,8 @@ public class ProfileCreation extends AppCompatActivity {
     private String displayName;
 
     private ClubProfileViewModel clubProfileViewModel;
+
+    private ClubProfileDao clubProfileDao;
 
     /**
      * Initializes the activity.
@@ -100,14 +104,12 @@ public class ProfileCreation extends AppCompatActivity {
             clubProfile.setSocialMediaLink(socialMediaLink);
             clubProfile.setPhoneNumber(phoneNumber);
             clubProfile.setMainContactName(mainContactName);
-            clubProfile.setDisplayName(displayName); // Assuming you have this setter in ClubProfile
-
+            clubProfile.setDisplayName(displayName);
 
             clubProfileViewModel.insertProfile(clubProfile);
-            Toast.makeText(this, "Profile saved", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(ProfileCreation.this, ProfilePage.class);
-            intent.putExtra("clubName", clubName); // 'clubName' is the name of the club entered by the user
-            startActivity(intent);
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra("clubName", clubName);
+            setResult(RESULT_OK, returnIntent);
             finish();
         }
 

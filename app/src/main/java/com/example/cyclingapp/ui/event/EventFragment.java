@@ -1,5 +1,6 @@
 package com.example.cyclingapp.ui.event;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,6 +24,8 @@ import com.example.cyclingapp.databinding.FragmentEventBinding;
 public class EventFragment extends Fragment {
 
     private FragmentEventBinding binding; // View binding for the fragment
+    private static final int REQUEST_CODE_CREATE_PROFILE = 1; // Unique request code
+
 
     @Nullable
     @Override
@@ -58,15 +61,30 @@ public class EventFragment extends Fragment {
             startActivity(intent);
         });
 
-        binding.createProfile.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), ProfileCreation.class);
+        binding.createProfile.setOnClickListener(v -> {Intent intent = new Intent(getActivity(), ProfileCreation.class);
             String displayName = getArguments().getString("displayName", null);
             intent.putExtra("displayName", displayName);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE_CREATE_PROFILE); // Define REQUEST_CODE_CREATE_PROFILE as a constant
         });
 
-        // Return the root view of the inflated layout
         return binding.getRoot();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_CREATE_PROFILE && resultCode == Activity.RESULT_OK && data != null) {
+            String clubName = data.getStringExtra("clubName");
+            // Now you have the clubName, you can use it to pass to ProfilePage
+            // For example, when you click viewProfile button:
+            binding.viewProfile.setOnClickListener(v -> {
+                Intent intent = new Intent(getActivity(), ProfilePage.class);
+                intent.putExtra("clubName", clubName); // Pass the clubName here
+                String displayName = getArguments().getString("displayName", null);
+                intent.putExtra("displayName", displayName);
+                startActivity(intent);
+            });
+        }
     }
 
     /**

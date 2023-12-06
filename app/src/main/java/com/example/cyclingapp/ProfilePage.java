@@ -101,21 +101,8 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
         String displayName = getIntent().getStringExtra("displayName");
 
         if (displayName != null) {
-            clubProfileViewModel.getProfileByDisplayName(displayName).observe(this, clubProfile -> {
-                if (clubProfile != null) {
-                    updateUI(clubProfile);
-                }
-            });
-            clubProfileEventViewModel.getEventsByClubName(clubName).observe(this, events -> {
-                if (events != null ) {
-                    adapter.setEvents(events);
-                } else {
-                    Log.d("ProfilePage", "No events found for this user"); // For debugging
-                }
-            });
-
+            loadClubProfile(displayName);
         }
-
 
         if (clubName != null) {
             clubProfileEventViewModel.getEventsByClubName(clubName).observe(this, events -> {
@@ -140,8 +127,6 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
     @Override
     protected void onResume() {
         super.onResume();
-        // Reload the events when resuming the activity
-
     }
 
     private void loadEvents() {
