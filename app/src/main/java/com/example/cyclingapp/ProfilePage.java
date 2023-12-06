@@ -127,7 +127,9 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
     }
 
     private void loadEvents() {
-        String clubName = ClubProfile.getClubName();
+
+        ClubProfile clubProfile = new ClubProfile();
+        String clubName = clubProfile.getClubName();
         // Observe the LiveData returned by the DAO
         db.eventDao().getEventsByClubName(clubName).observe(this, events -> {
             // This code block will be executed when the LiveData's data changes

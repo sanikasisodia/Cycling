@@ -30,7 +30,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     private Event clubName; //name of club
 
     private LoggedInUser displayName; //display name
-    private String currentClubName = ClubProfile.getClubName();
+
+    ClubProfile clubProfile = new ClubProfile();
+    private String currentClubName = clubProfile.getClubName();
 
 
     /**
