@@ -247,7 +247,6 @@ public class EventCreate extends AppCompatActivity {
             } else {
                 // If there's no ID, it's a new event, insert it into the database
                 db.eventDao().insertEvent(event);
-                clubProfileEventViewModel.insertEvent(event);
                 // Inform the user of the creation on the main thread
                 runOnUiThread(() -> Toast.makeText(EventCreate.this, "Event created", Toast.LENGTH_SHORT).show());
             }
