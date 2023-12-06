@@ -61,10 +61,11 @@ public class EventFragment extends Fragment {
             startActivity(intent);
         });
 
-        binding.createProfile.setOnClickListener(v -> {Intent intent = new Intent(getActivity(), ProfileCreation.class);
+        binding.createProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), ProfileCreation.class);
             String displayName = getArguments().getString("displayName", null);
             intent.putExtra("displayName", displayName);
-            startActivityForResult(intent, REQUEST_CODE_CREATE_PROFILE); // Define REQUEST_CODE_CREATE_PROFILE as a constant
+            startActivity(intent);
         });
 
         return binding.getRoot();
@@ -75,13 +76,9 @@ public class EventFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CREATE_PROFILE && resultCode == Activity.RESULT_OK && data != null) {
             String clubName = data.getStringExtra("clubName");
-            // Now you have the clubName, you can use it to pass to ProfilePage
-            // For example, when you click viewProfile button:
             binding.viewProfile.setOnClickListener(v -> {
                 Intent intent = new Intent(getActivity(), ProfilePage.class);
                 intent.putExtra("clubName", clubName); // Pass the clubName here
-                String displayName = getArguments().getString("displayName", null);
-                intent.putExtra("displayName", displayName);
                 startActivity(intent);
             });
         }

@@ -38,6 +38,19 @@ public class Setup {
         user2.passwordHash = BCrypt.hashpw(plainPassword, user2.passwordSalt);
         user2Dao.insertAll(user2);
 
+
+        UserDao user3Dao = db.userDao();
+        User user3 = new User();
+        user3.id = java.util.UUID.randomUUID().toString();
+        user3.role = Role.PARTICIPANT;
+        user3.email = "cyclingaddict";
+        user3.firstName = "CYCLING";
+        user3.lastName = "ADDICT";
+        String plainPassword2 = "cyclingIsLife!";
+        user3.passwordSalt = BCrypt.gensalt(12);
+        user3.passwordHash = BCrypt.hashpw(plainPassword2, user3.passwordSalt);
+        user3Dao.insertAll(user3);
+
         db.close();
     }
 }

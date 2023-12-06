@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
  * It lists all the entities that the database includes and the version of the database for schema management.
  * The database class is defined to be abstract and extends RoomDatabase to benefit from Room's database management capabilities.
  */
-@Database(entities = {User.class, Event.class, ClubProfile.class}, version = 5, exportSchema = false)
+@Database(entities = {User.class, Event.class, ClubProfile.class}, version = 6, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     // Sets the number of threads for the database operations
     private static final int NUMBER_OF_THREADS = 4;

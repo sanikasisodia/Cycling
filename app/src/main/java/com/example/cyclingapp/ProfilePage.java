@@ -196,8 +196,12 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
     @Override
     public void onDeleteClick(Event event) {
         new Thread(() -> {
-            db.eventDao().deleteEvent(event);
-            loadEvents();
+            try {
+                db.eventDao().deleteEvent(event);
+                runOnUiThread(this::loadEvents); // Ensuring UI interaction happens on the main thread
+            } catch (Exception e) {
+                e.printStackTrace(); // Log the exception
+            }
         }).start();
     }
 

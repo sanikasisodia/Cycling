@@ -13,6 +13,10 @@ public class Validation {
         if(email.equals("gccadmin")){
             return true;
         }
+
+        if (email.equals("cyclingaddict")){
+            return true;
+        }
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
@@ -24,6 +28,10 @@ public class Validation {
             return true;
         }
         if (password.equals("GCCRocks!")){
+            return true;
+        }
+
+        if (password.equals("cyclingIsLife!")){
             return true;
         }
         return password.trim().length() > 5;

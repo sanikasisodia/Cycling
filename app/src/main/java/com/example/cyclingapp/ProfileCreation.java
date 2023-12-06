@@ -26,7 +26,6 @@ public class ProfileCreation extends AppCompatActivity {
 
     private ClubProfileViewModel clubProfileViewModel;
 
-    private ClubProfileDao clubProfileDao;
 
     /**
      * Initializes the activity.
@@ -112,7 +111,6 @@ public class ProfileCreation extends AppCompatActivity {
             setResult(RESULT_OK, returnIntent);
             finish();
         }
-
     }
 
 
