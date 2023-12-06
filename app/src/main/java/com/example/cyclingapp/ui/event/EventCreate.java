@@ -252,8 +252,6 @@ public class EventCreate extends AppCompatActivity {
                 // Inform the user of the creation on the main thread
                 runOnUiThread(() -> Toast.makeText(EventCreate.this, "Event created", Toast.LENGTH_SHORT).show());
             }
-            // Close the activity after the operation is completed
-            finish();
         }).start();
     }
 

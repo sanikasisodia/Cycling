@@ -97,16 +97,8 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
         clubProfileEventViewModel = new ViewModelProvider(this).get(ClubProfileEventViewModel.class);
 
 
-        String displayName = getIntent().getStringExtra("displayName");
         String clubName = getIntent().getStringExtra("clubName");
-
-
-        //Setup Recycler View
-        RecyclerView clubEventsRecyclerView = findViewById(R.id.clubEvents);
-        EventAdapter adapter = new EventAdapter(new ArrayList<>(), this, getUserRole());
-        clubEventsRecyclerView.setAdapter(adapter);
-        clubEventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        String displayName = getIntent().getStringExtra("displayName");
 
         if (displayName != null) {
             clubProfileViewModel.getProfileByDisplayName(displayName).observe(this, clubProfile -> {
@@ -123,13 +115,33 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
             });
 
         }
-        }
 
+
+        if (clubName != null) {
+            clubProfileEventViewModel.getEventsByClubName(clubName).observe(this, events -> {
+                if (events != null) {
+                    adapter.setEvents(events);
+                } else {
+                    Log.d("ProfilePage", "No events found for this club");
+                }
+            });
+        }
+    }
+
+    private void loadClubProfile(String clubName) {
+        clubProfileViewModel.getProfileByDisplayName(clubName).observe(this, clubProfile -> {
+            if (clubProfile != null) {
+                updateUI(clubProfile);
+            } else {
+                Log.d("ProfilePage", "Club profile not found");
+            }
+        });
+    }
     @Override
     protected void onResume() {
         super.onResume();
         // Reload the events when resuming the activity
-        loadEvents();
+
     }
 
     private void loadEvents() {
@@ -149,11 +161,6 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
 
         });
     }
-
-
-        private Role getUserRole() {
-        return LoggedInUser.getRole();
-        }
 
     /**
      * Updates the UI elements with the provided club profile data.

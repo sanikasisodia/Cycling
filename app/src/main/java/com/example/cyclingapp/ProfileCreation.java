@@ -3,6 +3,7 @@ package com.example.cyclingapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -104,7 +105,11 @@ public class ProfileCreation extends AppCompatActivity {
 
             clubProfileViewModel.insertProfile(clubProfile);
             Toast.makeText(this, "Profile saved", Toast.LENGTH_SHORT).show();
-            finish();        }
+            Intent intent = new Intent(ProfileCreation.this, ProfilePage.class);
+            intent.putExtra("clubName", clubName); // 'clubName' is the name of the club entered by the user
+            startActivity(intent);
+            finish();
+        }
 
     }
 
