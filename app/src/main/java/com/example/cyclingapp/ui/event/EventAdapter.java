@@ -97,12 +97,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         if (userRole != null && userRole.equals(Role.PARTICIPANT)) {
             holder.btnEditEvent.setVisibility(View.INVISIBLE);
             holder.btnDeleteEvent.setVisibility(View.INVISIBLE);
-        } else if (userRole != null && userRole.equals(Role.CLUB)) {
+        } else {
             holder.btnEditEvent.setVisibility(View.VISIBLE);
             holder.btnDeleteEvent.setVisibility(View.VISIBLE);
-        } else {
-            holder.btnEditEvent.setVisibility(View.GONE);
-            holder.btnDeleteEvent.setVisibility(View.GONE);
         }
 
         // Show the Join button for participant users
