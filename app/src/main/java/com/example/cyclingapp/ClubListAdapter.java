@@ -1,12 +1,16 @@
 package com.example.cyclingapp;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
@@ -55,10 +59,12 @@ public class ClubListAdapter extends ListAdapter<ClubProfile, ClubListAdapter.Cl
     public static class ClubProfileViewHolder extends RecyclerView.ViewHolder {
 
         TextView clubNameTextView;
+        Button reviewButton;
 
         public ClubProfileViewHolder(View itemView) {
             super(itemView);
             clubNameTextView = itemView.findViewById(R.id.clubNameTextView);
+            reviewButton = itemView.findViewById(R.id.reviewButton);
         }
 
         public void bind(ClubProfile profile, OnItemClickListener listener) {
@@ -69,7 +75,39 @@ public class ClubListAdapter extends ListAdapter<ClubProfile, ClubListAdapter.Cl
                     listener.onItemClick(profile);
                 }
             });
+            reviewButton.setOnClickListener(v -> showReviewDialog());
+
         }
+
+        private void showReviewDialog() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext());
+            LayoutInflater inflater = LayoutInflater.from(itemView.getContext());
+            View dialogView = inflater.inflate(R.layout.dialog_review_club, null);
+
+            final EditText commentEditText = dialogView.findViewById(R.id.editTextText);
+            final EditText ratingEditText = dialogView.findViewById(R.id.editTextText2);
+
+            builder.setView(dialogView)
+                    .setPositiveButton("Submit", (dialog, id) -> {
+                        String comment = commentEditText.getText().toString();
+                        String ratingStr = ratingEditText.getText().toString();
+                        int rating = 0;
+                        try {
+                            rating = Integer.parseInt(ratingStr);
+                            if (rating < 1 || rating > 5) {
+                                throw new NumberFormatException("Rating must be between 1 and 5.");
+                            }
+                            Toast.makeText(itemView.getContext(), "Review Submitted", Toast.LENGTH_SHORT).show();
+                        } catch (NumberFormatException e) {
+                            Toast.makeText(itemView.getContext(), "Invalid rating. Please enter a number between 1 and 5.", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNegativeButton("Cancel", (dialog, id) -> dialog.dismiss());
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+
     }
 
     public interface OnItemClickListener {
