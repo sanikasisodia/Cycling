@@ -53,20 +53,17 @@ public class ClubListAdapter extends ListAdapter<ClubProfile, ClubListAdapter.Cl
     }
 
     public static class ClubProfileViewHolder extends RecyclerView.ViewHolder {
-        // Define view elements here, e.g., TextViews
+
         TextView clubNameTextView;
 
         public ClubProfileViewHolder(View itemView) {
             super(itemView);
-            // Initialize your views here
             clubNameTextView = itemView.findViewById(R.id.clubNameTextView);
         }
 
         public void bind(ClubProfile profile, OnItemClickListener listener) {
-            // Set data to your views
             clubNameTextView.setText(profile.getClubName());
 
-            // Set the click listener
             itemView.setOnClickListener(v -> {
                 if (listener != null) {
                     listener.onItemClick(profile);
@@ -86,7 +83,7 @@ public class ClubListAdapter extends ListAdapter<ClubProfile, ClubListAdapter.Cl
     }
 
     public void submitList(List<ClubProfile> list) {
-        fullList = new ArrayList<>(list); // Keep a copy of the full list
+        fullList = new ArrayList<>(list);
         super.submitList(list);
     }
 
