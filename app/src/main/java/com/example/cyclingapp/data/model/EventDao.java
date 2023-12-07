@@ -48,18 +48,8 @@ public interface EventDao {
     @Query("SELECT * FROM events")
     List<Event> getAllEvents();
 
-    @Query("SELECT * FROM events WHERE clubName= :clubName")
-    LiveData<List<Event>> getEventsByClubName(String clubName);
+    @Query("SELECT * FROM events WHERE clubName = :clubName")
+    List<Event> getEventsByClubName(String clubName);
 
 
-
-
-    /**
-     * Retrieves a single event by its ID.
-     *
-     * @param eventId The ID of the event to find.
-     * @return The event with the specified ID, or null if not found.
-     */
-    @Query("SELECT * FROM events WHERE id = :eventId")
-    Event getEventById(int eventId);
 }

@@ -7,5 +7,3 @@ Daniel Thorp 300295868
 Vanessa Vo  300234993
 
 Sanika Sisodia 300283847
-
-Tony Kim 300087407

@@ -54,6 +54,8 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
     private List<Event> filteredList = new ArrayList<>(); // List of filtered events
     private int[] imageIds = new int[]{R.drawable.logo1, R.drawable.logo2, R.drawable.logo3};
 
+    String clubName;
+
     /**
      * Initializes the activity.
      * Sets up the user interface, view model, and initializes the process to load club profile data.
@@ -80,7 +82,6 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
         recyclerView.setAdapter(adapter);
 
         // Load events from the database
-        loadEvents();
 
         // Initialize UI components
         clubNameTextView = findViewById(R.id.clubName);
@@ -97,27 +98,16 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
         clubProfileEventViewModel = new ViewModelProvider(this).get(ClubProfileEventViewModel.class);
 
 
-        String clubName = getIntent().getStringExtra("clubName");
         String displayName = getIntent().getStringExtra("displayName");
-
         if (displayName != null) {
             clubProfileViewModel.getProfileByDisplayName(displayName).observe(this, clubProfile -> {
                 if (clubProfile != null) {
                     updateUI(clubProfile);
-                }
-            });
-
-        }
-
-        if (clubName != null) {
-            clubProfileEventViewModel.getEventsByClubName(clubName).observe(this, events -> {
-                if (events != null) {
-                    adapter.setEvents(events);
-                } else {
-                    Log.d("ProfilePage", "No events found for this club");
+                    loadEvents(clubProfile.getClubName());
                 }
             });
         }
+
     }
 
 
@@ -126,24 +116,21 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
         super.onResume();
     }
 
-    private void loadEvents() {
-
-        ClubProfile clubProfile = new ClubProfile();
-        String clubName = clubProfile.getClubName();
-        // Observe the LiveData returned by the DAO
-        db.eventDao().getEventsByClubName(clubName).observe(this, events -> {
-            // This code block will be executed when the LiveData's data changes
-            eventList.clear();
-            if (events != null) {
-                eventList.addAll(events);
-            }
-            filteredList.clear();
-            filteredList.addAll(eventList);
-            // Since this observer callback is already on the main thread, no need to use runOnUiThread
-            adapter.setEvents(filteredList);
-            adapter.notifyDataSetChanged();
-
-        });
+    private void loadEvents(String clubName) {
+        if (clubName != null && !clubName.isEmpty()) {
+            new Thread(() -> {
+                try {
+                    List<Event> events = db.eventDao().getEventsByClubName(clubName);
+                    runOnUiThread(() -> {
+                        filteredList.clear();
+                        filteredList.addAll(events); // Use the directly fetched events list
+                        adapter.notifyDataSetChanged();
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace(); // Log the exception
+                }
+            }).start();
+        }
     }
 
     /**
@@ -156,10 +143,8 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
         socialMediaLinkTextView.setText(clubProfile.getSocialMediaLink());
         phoneNumberTextView.setText(clubProfile.getPhoneNumber());
         mainContactNameTextView.setText(clubProfile.getMainContactName());
+        clubName = clubProfile.getClubName();
     }
-
-    /** Add Events created by club to profile view
-     * **/
 
     /**
      * Displays a dialog allowing the user to select a logo from predefined drawable resources.
@@ -200,12 +185,13 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
         new Thread(() -> {
             try {
                 db.eventDao().deleteEvent(event);
-                runOnUiThread(this::loadEvents); // Ensuring UI interaction happens on the main thread
+                runOnUiThread(() -> loadEvents(clubName)); // Corrected call to loadEvents
             } catch (Exception e) {
                 e.printStackTrace(); // Log the exception
             }
         }).start();
     }
+
 
     @Override
     public void onJoinClick(Event event) {

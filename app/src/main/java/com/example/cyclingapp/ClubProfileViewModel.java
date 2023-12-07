@@ -51,4 +51,7 @@ public class ClubProfileViewModel extends AndroidViewModel {
     public LiveData<ClubProfile> getProfileByDisplayName(String displayName) {
         return clubProfileDao.getProfileByDisplayName(displayName);
     }
+
+
+
 }

@@ -71,19 +71,6 @@ public class EventFragment extends Fragment {
         return binding.getRoot();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_CREATE_PROFILE && resultCode == Activity.RESULT_OK && data != null) {
-            String clubName = data.getStringExtra("clubName");
-            binding.viewProfile.setOnClickListener(v -> {
-                Intent intent = new Intent(getActivity(), ProfilePage.class);
-                intent.putExtra("clubName", clubName); // Pass the clubName here
-                startActivity(intent);
-            });
-        }
-    }
-
     /**
      * Navigates to the EventCreate activity.
      */
@@ -100,6 +87,8 @@ public class EventFragment extends Fragment {
 
         // Pass the role to the EventList activity
         Role role = (Role) getArguments().getSerializable("role");
+        String displayName = getArguments().getString("displayName", null);
+        intent.putExtra("displayName", displayName);
         intent.putExtra("role", role);
         startActivity(intent);
     }

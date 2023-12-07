@@ -34,8 +34,7 @@ public class EventCreate extends AppCompatActivity {
     // Event object for editing
     private Event eventToEdit;
 
-    private String displayName = LoggedInUser.getDisplayName();
-
+    private String displayName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +50,9 @@ public class EventCreate extends AppCompatActivity {
         editParticipationCount = findViewById(R.id.editParticipationCount);
         editFee = findViewById(R.id.editFee);
         btnCreate = findViewById(R.id.btnCreate);
+
+        displayName = getIntent().getStringExtra("displayName");
+
 
         // Populate the spinner with event types
         populateSpinner();

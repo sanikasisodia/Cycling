@@ -44,15 +44,13 @@ public class ClubProfileEventViewModel extends AndroidViewModel{
             eventDao.insertEvent(event);
         });
     }
-    /**
-     * Retrieves a club profile from the database based on the display name.
-     * This method returns a LiveData object containing the club profile.
-     *
-     * @param clubName The display name of the club profile to retrieve.
-     * @return LiveData containing the ClubProfileEvent object.
-     */
-    public LiveData<List<Event>> getEventsByClubName(String clubName) {
-        return eventDao.getEventsByClubName(clubName);
+
+    public List<Event> getEventsByClubName(String clubName) {
+        List<Event> events = new ArrayList<>();
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            events.addAll(eventDao.getEventsByClubName(clubName));
+        });
+        return events;
     }
 
 }

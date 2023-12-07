@@ -104,11 +104,7 @@ public class ProfileCreation extends AppCompatActivity {
             clubProfile.setPhoneNumber(phoneNumber);
             clubProfile.setMainContactName(mainContactName);
             clubProfile.setDisplayName(displayName);
-
             clubProfileViewModel.insertProfile(clubProfile);
-            Intent returnIntent = new Intent();
-            returnIntent.putExtra("clubName", clubName);
-            setResult(RESULT_OK, returnIntent);
             finish();
         }
     }
