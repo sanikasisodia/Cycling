@@ -6,6 +6,8 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import java.util.List;
+
 @Dao
 public interface ClubProfileDao {
     @Query("SELECT * FROM club_profiles WHERE id = :id")
@@ -21,7 +23,7 @@ public interface ClubProfileDao {
     @Insert
     void insertProfile(ClubProfile clubProfile);
 
-    @Update
-    void updateProfile(ClubProfile clubProfile);
+    @Query("SELECT * FROM club_profiles")
+    LiveData<List<ClubProfile>> getAllClubProfiles();
 
 }

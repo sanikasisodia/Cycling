@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.cyclingapp.ClubList;
 import com.example.cyclingapp.ProfileCreation;
 import com.example.cyclingapp.ProfilePage;
 import com.example.cyclingapp.data.model.Role;
@@ -63,6 +64,11 @@ public class EventFragment extends Fragment {
 
         // Set up listeners for other UI components
         binding.btnList.setOnClickListener(v -> navigateToEventList());
+
+        binding.clubList.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), ClubList.class);
+            startActivity(intent);
+        });
 
         binding.viewProfile.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), ProfilePage.class);

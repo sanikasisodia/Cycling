@@ -10,6 +10,8 @@ import com.example.cyclingapp.data.model.AppDatabase;
 import com.example.cyclingapp.data.model.ClubProfile;
 import com.example.cyclingapp.data.model.ClubProfileDao;
 
+import java.util.List;
+
 /**
  * ViewModel for the club profile.
  * Provides a layer of abstraction between the UI and the database.
@@ -52,6 +54,13 @@ public class ClubProfileViewModel extends AndroidViewModel {
         return clubProfileDao.getProfileByDisplayName(displayName);
     }
 
+    public LiveData<List<ClubProfile>> getAllClubProfiles() {
+        return clubProfileDao.getAllClubProfiles();
+    }
+
+    public LiveData<ClubProfile> getProfileById(int id) {
+        return clubProfileDao.getProfileById(id);
+    }
 
 
 }

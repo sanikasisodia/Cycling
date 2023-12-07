@@ -97,6 +97,16 @@ public class ProfilePage extends AppCompatActivity implements EventAdapter.Event
         clubProfileViewModel = new ViewModelProvider(this).get(ClubProfileViewModel.class);
         clubProfileEventViewModel = new ViewModelProvider(this).get(ClubProfileEventViewModel.class);
 
+        int clubProfileId = getIntent().getIntExtra("CLUB_PROFILE_ID", -1);
+        if (clubProfileId != -1) {
+            clubProfileViewModel.getProfileById(clubProfileId).observe(this, clubProfile -> {
+                if (clubProfile != null) {
+                    updateUI(clubProfile);
+                    loadEvents(clubProfile.getClubName());
+                }
+            });
+        }
+
 
         String displayName = getIntent().getStringExtra("displayName");
         if (displayName != null) {
