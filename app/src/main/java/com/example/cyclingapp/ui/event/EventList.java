@@ -163,7 +163,7 @@ public class EventList extends AppCompatActivity implements EventAdapter.EventAd
         dialog.show();
     }
 
-    private boolean isValidPhoneNumber(String phoneNumber) {
+    public boolean isValidPhoneNumber(String phoneNumber) {
         String regex = "^[+]?[0-9]{10,13}$";
         return phoneNumber.matches(regex);
     }
