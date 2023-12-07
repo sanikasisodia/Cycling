@@ -55,6 +55,8 @@ public class EventFragment extends Fragment {
                 if (role.equals(Role.ADMIN) || role.equals(Role.CLUB)) {
                     binding.btnAdd.setEnabled(true);
                     binding.btnAdd.setOnClickListener(v -> navigateToEventCreate());
+                    binding.viewProfile.setEnabled(true);
+                    binding.createProfile.setEnabled(true);
                 }
             }
         }
