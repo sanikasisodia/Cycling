@@ -51,6 +51,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="249dp"
             android:layout_marginBottom="111dp"
+            android:enabled="false"
             android:text="View Profile" />
 
         <Button
@@ -62,6 +63,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="242dp"
             android:layout_marginBottom="171dp"
+            android:enabled="false"
             android:text="Create Profile" />
 
     </RelativeLayout>
