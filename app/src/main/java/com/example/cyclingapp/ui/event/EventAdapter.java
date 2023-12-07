@@ -24,15 +24,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
     private List<Event> events; // Cached copy of events
     private final EventAdapterListener listener; // Listener for edit and delete actions
-    private List<Event> eventList;
     private Role userRole; // The role of the user
 
-    private Event clubName; //name of club
-
-    private LoggedInUser displayName; //display name
-
-    ClubProfile clubProfile = new ClubProfile();
-    private String currentClubName = clubProfile.getClubName();
 
 
     /**
@@ -104,9 +97,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         if (userRole != null && userRole.equals(Role.PARTICIPANT)) {
             holder.btnEditEvent.setVisibility(View.INVISIBLE);
             holder.btnDeleteEvent.setVisibility(View.INVISIBLE);
-        } else {
+        } else if (userRole != null && userRole.equals(Role.CLUB)) {
             holder.btnEditEvent.setVisibility(View.VISIBLE);
             holder.btnDeleteEvent.setVisibility(View.VISIBLE);
+        } else {
+            holder.btnEditEvent.setVisibility(View.GONE);
+            holder.btnDeleteEvent.setVisibility(View.GONE);
         }
 
         // Show the Join button for participant users

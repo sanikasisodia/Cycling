@@ -40,14 +40,22 @@ public class EventFragment extends Fragment {
         if (bundle != null) {
             String displayName = bundle.getString("displayName", "User");
             Role role = (Role) bundle.getSerializable("role");
-            // Create and show a welcome message
-            String welcomeMessage = "Welcome, " + displayName + "!" + "\n" + "You are logged in as \"" + role + "\".";
-            Toast.makeText(getActivity(), welcomeMessage, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Welcome, " + displayName + "!" + "\n" + "You are logged in as \"" + role + "\".", Toast.LENGTH_LONG).show();
 
-            // Enable event creation button only if the user is an admin or club
-            if (role != null && (role.equals(Role.ADMIN) || role.equals(Role.CLUB))) {
-                binding.btnAdd.setEnabled(true);
-                binding.btnAdd.setOnClickListener(v -> navigateToEventCreate());
+            // Set visibility based on user's role
+            if (role != null) {
+                if (role.equals(Role.CLUB)) {
+                    binding.createProfile.setVisibility(View.VISIBLE);
+                    binding.viewProfile.setVisibility(View.VISIBLE);
+                } else {
+                    binding.createProfile.setVisibility(View.GONE);
+                    binding.viewProfile.setVisibility(View.GONE);
+                }
+
+                if (role.equals(Role.ADMIN) || role.equals(Role.CLUB)) {
+                    binding.btnAdd.setEnabled(true);
+                    binding.btnAdd.setOnClickListener(v -> navigateToEventCreate());
+                }
             }
         }
 
